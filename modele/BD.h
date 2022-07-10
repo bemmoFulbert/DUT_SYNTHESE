@@ -14,5 +14,6 @@ class BD: public QSqlDatabase{
         BD(QString data_base_type);
         ~BD();
 };
+
 #endif // BD_H
 

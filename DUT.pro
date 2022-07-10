@@ -12,11 +12,13 @@ CONFIG += c++11
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
-    modele/BD.cpp
+    modele/BD.cpp \
+    traitement/Auteur.cpp
 
 HEADERS += \
     mainwindow.h \
-    modele/BD.h
+    modele/BD.h \
+    traitement/Auteur.h
 
 FORMS += \
     mainwindow.ui
