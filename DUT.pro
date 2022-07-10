@@ -14,14 +14,12 @@ SOURCES += \
     mainwindow.cpp \
     modele/BD.cpp \
     traitement/Auteur.cpp \
-    traitement/auteurf.cpp \
     traitement/backend_interface_headers(0.1.0).cpp
 
 HEADERS += \
     mainwindow.h \
     modele/BD.h \
-    traitement/Auteur.h \
-    traitement/auteurf.h
+    traitement/Auteur.h
 
 FORMS += \
     mainwindow.ui
