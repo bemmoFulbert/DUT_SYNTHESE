@@ -13,7 +13,8 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     modele/BD.cpp \
-    traitement/Auteur.cpp
+    traitement/Auteur.cpp \
+    traitement/backend_interface_headers(0.1.0).cpp
 
 HEADERS += \
     mainwindow.h \
