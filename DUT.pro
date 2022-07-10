@@ -12,11 +12,13 @@ CONFIG += c++11
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
-    modele/BD.cpp
+    modele/BD.cpp \
+    traitement/auteur.cpp
 
 HEADERS += \
     mainwindow.h \
-    modele/BD.h
+    modele/BD.h \
+    traitement/auteur.h
 
 FORMS += \
     mainwindow.ui
@@ -28,4 +30,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 DISTFILES += \
     modele/db_v0.0.1.sql \
-    modele/dut_puc2442_proj.db
+    modele/dut_puc2442_proj.db \
+    uml/uml_class_diag.edg \
+    uml/uml_use_case_diag.edg
