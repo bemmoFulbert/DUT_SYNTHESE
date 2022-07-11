@@ -4,8 +4,6 @@
 #include <string>
 #include <vector>
 
-
-
 #include "BDR_SQLite3.h"
 
 using namespace std;
