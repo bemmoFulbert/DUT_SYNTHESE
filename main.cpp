@@ -2,14 +2,17 @@
 
 #include <QApplication>
 
-#include "backend/auteur.h"
+#include "backend/livre.h"
+//#include "backend/auteurdata.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     MainWindow w;
 
-    Auteur::modifierNom(3,"gandou");
+    vector<LivreData> v;
+    Livre::consulter(v);
+    LivreData::affiche_livreData(v);
 
     w.show();
     return a.exec();
