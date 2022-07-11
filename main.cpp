@@ -1,16 +1,16 @@
 #include "mainwindow.h"
 
 #include <QApplication>
-#include <QToolBar>
 
-#include "modele/BD.h"
+#include "backend/auteur.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     MainWindow w;
-    BD bdd("QSQLITE");
-    w.addToolBar(new QToolBar(&w));
+
+    Auteur::modifierNom(3,"gandou");
+
     w.show();
     return a.exec();
 }
