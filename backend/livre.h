@@ -30,10 +30,10 @@ class Livre{
             static bool modifierTitre(unsigned int id,const string titre);
             static bool modifierDateDePublication(unsigned int id,const string dateDePublication);
             static bool supprimer(unsigned int id);
-            static bool consulter(vector<LivreData> &livres);
+            static bool consulter(vector<LivreData> &livres,const string &condition="");
 
-            static bool ajouterNbreDeCopies(unsigned int nbreAAjouter);
-//            static bool consulterLivresEmprunterTrieParNom(vector<LivreData> &livres);
+//            static bool ajouterNbreDeCopies(unsigned int id,unsigned int nbreAAjouter);
+            static bool consulterLivresEmprunterTrieParNom(vector<LivreData> &livres,bool isAsc=true);
 //            static bool consulterLivresEmprunterTrieParDate(vector<LivreData> &livres);
         private:
             static BDR_SQLite3 bd;

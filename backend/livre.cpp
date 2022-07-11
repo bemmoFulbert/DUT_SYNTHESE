@@ -26,11 +26,11 @@ bool Livre::supprimer(unsigned int id){
     return bd.supprimer("livre",{id},"id");
 }
 
-bool Livre::consulter(vector<LivreData> &livres){
+bool Livre::consulter(vector<LivreData> &livres,const string &condition){
     vector<string> vChamps = {"titre","dateDePub","nbreExemplairesTotal","nbreExemplairesEmprunter","id_auteur"};
     vector<string> vValeurs;
 
-    if(!bd.consulter("livre",vChamps,vValeurs)) return false;
+    if(!bd.consulter("livre",vChamps,vValeurs,condition)) return false;
 
     for(unsigned int i=0;i<vValeurs.size();i+=5){
         LivreData data(vValeurs[i],vValeurs[i+1],stoi(vValeurs[i+2]),stoi(vValeurs[i+3]),stoi(vValeurs[i+4]));
@@ -40,10 +40,14 @@ bool Livre::consulter(vector<LivreData> &livres){
     return true;
 }
 
-bool ajouterNbreDeCopies(unsigned int nbreAAjouter){
-
+bool Livre::consulterLivresEmprunterTrieParNom(vector<LivreData> &livres,bool isAsc){
+    if(isAsc){
+        return consulter(livres,",Emprunte where Emprunte.id_livre = Livre.id order by titre asc");
+    }
+    else{
+        return consulter(livres,",Emprunte where Emprunte.id_livre = Livre.id order by titre desc");
+    }
 }
-
 
 //----------LivreData-----------------
 

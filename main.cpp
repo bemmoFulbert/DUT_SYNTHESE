@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
     MainWindow w;
 
     vector<LivreData> v;
-    Livre::consulter(v);
+    Livre::consulterLivresEmprunterTrieParNom(v);
     LivreData::affiche_livreData(v);
 
     w.show();
