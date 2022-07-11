@@ -1,4 +1,3 @@
-QT  += sql
 QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -12,18 +11,17 @@ CONFIG += c++11
 SOURCES += \
     backend/auteur.cpp \
     main.cpp \
-    mainwindow.cpp \
-    modele/BD.cpp
+    mainwindow.cpp
 
 HEADERS += \
     backend/BDR_SQLite3.h \
     backend/WeakSQLCommandGenerator.h \
     backend/auteur.h \
-    mainwindow.h \
-    modele/BD.h
+    mainwindow.h
 
 FORMS += \
     mainwindow.ui
+LIBS += -lsqlite3
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
