@@ -1,0 +1,3 @@
+- C++ STL for using the <vector> class
+- QT 5.x for gui
+- sqlite3 for handling database
