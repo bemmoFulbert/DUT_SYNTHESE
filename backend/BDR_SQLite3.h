@@ -1,11 +1,13 @@
-#ifndef BDR_SQLITE_H_INCLUDED
-#define BDR_SQLITE_H_INCLUDED
+#ifndef BDR_SQLITE3_H_INCLUDED
+#define BDR_SQLITE3_H_INCLUDED
 
 #include "WeakSQLCommandGenerator.h"
 #include "sqlite3.h"
 
 
-
+/*
+    Could enable the object to provide sqlite3_error_code on errors
+*/
 class BDR_SQLite3{
     private:
         string filename;
@@ -86,7 +88,10 @@ class BDR_SQLite3{
                 condID += nomChampID + "=" + id_str + ((i == ids.size()-1) ? "" : " OR ");
             }
 
-            return modifier(nomTable,nomChamps,nouvelValeurs,condID + " AND (" + cond + ")");
+            if (!cond[0]){
+                return modifier(nomTable,nomChamps,nouvelValeurs,condID);
+            }
+            return modifier(nomTable,nomChamps,nouvelValeurs,condID + " AND (" + cond + ")"));
         };
 
 
@@ -149,4 +154,4 @@ class BDR_SQLite3{
 
 };
 
-#endif // BDR_SQLITE_H_INCLUDED
+#endif // BDR_SQLITE3_H_INCLUDED

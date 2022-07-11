@@ -10,7 +10,7 @@ using namespace std;
 
 /*
     This class provides a set of methods that generates weak sql commands from userdata
-    The *weak* here means the expected sql strings passed by the user are not checked by an sql parser
+    The *weak* here means the expected sql strings provided by the user are not checked by an sql parser
 */
 class WeakSQLCommandGenerator{
     /*
