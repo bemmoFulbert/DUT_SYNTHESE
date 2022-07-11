@@ -42,12 +42,22 @@ bool Livre::consulter(vector<LivreData> &livres,const string &condition){
 
 bool Livre::consulterLivresEmprunterTrieParNom(vector<LivreData> &livres,bool isAsc){
     if(isAsc){
-        return consulter(livres,",Emprunte where Emprunte.id_livre = Livre.id order by titre asc");
+        return consulter(livres,",Emprunte where Emprunte.id_livre = Livre.id order by Livre.titre asc");
     }
     else{
-        return consulter(livres,",Emprunte where Emprunte.id_livre = Livre.id order by titre desc");
+        return consulter(livres,",Emprunte where Emprunte.id_livre = Livre.id order by Livre.titre desc");
     }
 }
+
+bool Livre::consulterLivresEmprunterTrieParDate(vector<LivreData> &livres,bool isAsc){
+    if(isAsc){
+        return consulter(livres,",Emprunte where Emprunte.id_livre = Livre.id order by Emprunte.date asc");
+    }
+    else{
+        return consulter(livres,",Emprunte where Emprunte.id_livre = Livre.id order by Emprunte.date desc");
+    }
+}
+
 
 //----------LivreData-----------------
 

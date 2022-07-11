@@ -34,7 +34,7 @@ class Livre{
 
 //            static bool ajouterNbreDeCopies(unsigned int id,unsigned int nbreAAjouter);
             static bool consulterLivresEmprunterTrieParNom(vector<LivreData> &livres,bool isAsc=true);
-//            static bool consulterLivresEmprunterTrieParDate(vector<LivreData> &livres);
+            static bool consulterLivresEmprunterTrieParDate(vector<LivreData> &livres,bool isAsc); //par la date de l'emprunte
         private:
             static BDR_SQLite3 bd;
     };
