@@ -20,3 +20,30 @@ bool Auteur::modifierPrenom(unsigned int id,const string &prenom){
 bool Auteur::supprimer(unsigned int id){
     return bd.supprimer("auteur",{id},"id");
 }
+
+bool Auteur::consulter(vector<AuteurData> &auteurs){
+    vector<string> vChamps = {"nom","prenom"};
+    vector<string> vValeurs;
+
+    if(!bd.consulter("auteur",vChamps,vValeurs)) return false;
+
+    for(unsigned int i=0;i<vValeurs.size();i+=2){
+        AuteurData data(vValeurs[i],vValeurs[i+1]);
+        auteurs.push_back(data);
+    }
+
+    return true;
+}
+
+//-----------AuteurData----------------
+
+AuteurData::AuteurData(string nom,string prenom){
+    this->nom = nom;
+    this->prenom = prenom;
+}
+
+void AuteurData::affiche_auteurData(vector<AuteurData> v){
+    for(unsigned int i = 0;i<v.size();i++){
+        cout << v[i].nom << " - " << v[i].prenom << endl;
+    }
+}

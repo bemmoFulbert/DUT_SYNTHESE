@@ -2,8 +2,8 @@
 
 #-----------news---------------------------news---------------------------news----------------
 
-# updated to use with sqlite
-# and added update cascade to foreign key constraint
+#delete added update cascade to foreign key constraint
+# and added delete cascade to foreign key constraint
 
 #-----------news---------------------------news---------------------------news----------------
 
@@ -27,7 +27,7 @@ create table Livre(
 	nbreExemplairesTotal int unsigned,
 	nbreExemplairesEmprunter int unsigned,
 	id_auteur int unsigned,
-	foreign key (id_auteur) references Auteur(id) ON UPDATE CASCADE
+	foreign key (id_auteur) references Auteur(id) ON DELETE CASCADE
 );
 
 create table Adherent(
@@ -42,8 +42,8 @@ create table Emprunte(
 	id_adherent int unsigned,
 	date timestamp,
 	primary key(id_livre,id_adherent,date),
-	foreign key (id_livre) references Livre(id) ON UPDATE CASCADE,
-	foreign key (id_adherent) references Adherent(id) ON UPDATE CASCADE
+	foreign key (id_livre) references Livre(id) ON DELETE CASCADE,
+	foreign key (id_adherent) references Adherent(id) ON DELETE CASCADE
 );
 
 create table Retourne(
@@ -51,6 +51,6 @@ create table Retourne(
 	id_adherent int unsigned,
 	date timestamp,
 	primary key(id_livre,id_adherent,date),
-	foreign key (id_livre) references Livre(id) ON UPDATE CASCADE,
-	foreign key (id_adherent) references Adherent(id) ON UPDATE CASCADE
+	foreign key (id_livre) references Livre(id) ON DELETE CASCADE,
+	foreign key (id_adherent) references Adherent(id) ON DELETE CASCADE
 );
