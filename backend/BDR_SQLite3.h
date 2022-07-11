@@ -91,7 +91,7 @@ class BDR_SQLite3{
             if (!cond[0]){
                 return modifier(nomTable,nomChamps,nouvelValeurs,condID);
             }
-            return modifier(nomTable,nomChamps,nouvelValeurs,condID + " AND (" + cond + ")"));
+            return modifier(nomTable,nomChamps,nouvelValeurs,condID + " AND (" + cond + ")");
         };
 
 

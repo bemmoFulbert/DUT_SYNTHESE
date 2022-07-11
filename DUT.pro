@@ -10,6 +10,7 @@ CONFIG += c++11
 
 SOURCES += \
     backend/auteur.cpp \
+    backend/livre.cpp \
     main.cpp \
     mainwindow.cpp
 
@@ -17,6 +18,7 @@ HEADERS += \
     backend/BDR_SQLite3.h \
     backend/WeakSQLCommandGenerator.h \
     backend/auteur.h \
+    backend/livre.h \
     mainwindow.h
 
 FORMS += \
