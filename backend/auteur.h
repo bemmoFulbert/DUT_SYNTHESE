@@ -4,11 +4,9 @@
 #include <string>
 #include <vector>
 #include <fstream>
-#include <sstream>
-
-#include <QDebug>
 
 #include "BDR_SQLite3.h"
+#include "util.h"
 
 using namespace std;
 
@@ -33,8 +31,8 @@ class Auteur{
 
         static bool exportToFile(vector<AuteurData> data,const string &nom_fichier,const string &separateur=" ");
         static bool exportToFile(const string &nom_fichier,const string &separateur=" ");
-        static unsigned int importToVector(vector<AuteurData> data,string nom_fichier,const string &separateur=" ");//importe dans un tableau dynamique
-        //static unsigned int importToDB(string nom_fichier); // importe dans la base de donnees
+        static unsigned int importToVector(vector<AuteurData> &data,string nom_fichier,const string &separateur=" ");//importe dans un tableau dynamique
+        static unsigned int importToDB(string nom_fichier,const string &separateur=" "); // met dans la base de donnees
     private:
         static BDR_SQLite3 bd;
         static vector<string> vChamps;

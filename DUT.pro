@@ -13,6 +13,7 @@ SOURCES += \
     backend/adherent.cpp \
     backend/auteur.cpp \
     backend/livre.cpp \
+    backend/util.cpp \
     main.cpp \
     mainwindow.cpp
 
@@ -23,6 +24,7 @@ HEADERS += \
     backend/adherent.h \
     backend/auteur.h \
     backend/livre.h \
+    backend/util.h \
     mainwindow.h
 
 FORMS += \

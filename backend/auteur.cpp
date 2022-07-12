@@ -39,7 +39,7 @@ bool Auteur::exportToFile(vector<AuteurData> data,const string &nom_fichier,cons
     ofstream flux(nom_fichier.c_str());
     if(flux){
         flux << "// fichier d'exportation d'auteurs" <<endl;
-        flux << "// nom" <<"\t" << "prenom" << endl <<endl;
+        flux << "// nom" <<separateur << "prenom" << endl <<endl;
 
         for(unsigned int i=0;i<data.size();i++){
             flux << data[i].to_string(separateur) <<endl;
@@ -47,7 +47,7 @@ bool Auteur::exportToFile(vector<AuteurData> data,const string &nom_fichier,cons
         return true;
     }
     else {
-        qDebug() << "erreur d'ouverture du fichier \"" << QString::fromStdString(nom_fichier) << "\"" <<Qt::endl;
+        cout << "erreur d'ouverture du fichier \"" << nom_fichier << "\"" << endl;
         return false;
     }
 }
@@ -61,8 +61,45 @@ bool Auteur::exportToFile(const string &nom_fichier,const string &separateur){
 }
 
 
-unsigned int Auteur::importToVector(vector<AuteurData> data,string nom_fichier,const string &separateur){
+unsigned int Auteur::importToVector(vector<AuteurData> &data,string nom_fichier,const string &separateur){
+    ifstream flux (nom_fichier);
+    string ligne;
+    unsigned int i =0;
 
+    if(flux){
+        while(getline(flux,ligne)){
+            vector<string> dataTemp;
+
+            //pour la prise en charge des commantaires
+            if(ligne[0] == '/' && ligne[1] == '/'){}
+            else if(ligne[0] == '#'){}
+            else if(ligne.empty()){}
+            //pour la prise en charge des commantaires
+            else{
+                dataTemp = Util::splitString(ligne,separateur);
+
+                AuteurData ad(dataTemp[0],dataTemp[1]);
+                data.push_back(ad);
+                i++;
+            }
+        }
+        return i;
+    }
+    else{
+        cout << "erreur d'ouverture du fichier \"" << nom_fichier << "\"" << endl;
+        return 0;
+    }
+}
+
+unsigned int Auteur::importToDB(string nom_fichier,const string &separateur){
+    vector<AuteurData> data;
+
+    unsigned int nbrAjout = importToVector(data,nom_fichier,separateur);
+
+    for(unsigned int i=0;i<data.size();i++){
+        ajouter(data[i].nom,data[i].prenom);
+    }
+    return nbrAjout;
 }
 
 //-----------AuteurData----------------

@@ -1,0 +1,25 @@
+#include "util.h"
+
+vector<string> Util::splitString(string chaine, string separateur){
+    size_t pos_start = 0, pos_end;
+    string element;
+    vector<string> res;
+
+    while ((pos_end = chaine.find(separateur, pos_start)) != string::npos) {
+        element = chaine.substr(pos_start, pos_end - pos_start);
+        pos_start = pos_end + separateur.length();
+        res.push_back(element);
+    }
+
+    res.push_back(chaine.substr (pos_start));
+    return res;
+}
+
+string Util::vectorToString(const vector<string> &v,const string &separateur){
+    string res;
+    for(unsigned int i=0;i<v.size();i++){
+        res.append(v[i]);
+        res.append(separateur);
+    }
+    return res;
+}
