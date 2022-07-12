@@ -35,10 +35,35 @@ bool Auteur::consulter(vector<AuteurData> &auteurs){
     return true;
 }
 
-unsigned int import(string nom_fichier){
+bool Auteur::exportToFile(vector<AuteurData> data,const string &nom_fichier,const string &separateur){
+    ofstream flux(nom_fichier.c_str());
+    if(flux){
+        flux << "// fichier d'exportation d'auteurs" <<endl;
+        flux << "// nom" <<"\t" << "prenom" << endl <<endl;
 
+        for(unsigned int i=0;i<data.size();i++){
+            flux << data[i].to_string(separateur) <<endl;
+        }
+        return true;
+    }
+    else {
+        qDebug() << "erreur d'ouverture du fichier \"" << QString::fromStdString(nom_fichier) << "\"" <<Qt::endl;
+        return false;
+    }
 }
 
+bool Auteur::exportToFile(const string &nom_fichier,const string &separateur){
+    vector<AuteurData> data;
+    if(consulter(data)){
+           return exportToFile(data,nom_fichier,separateur);
+    }
+    else return false;
+}
+
+
+unsigned int Auteur::importToVector(vector<AuteurData> data,string nom_fichier,const string &separateur){
+
+}
 
 //-----------AuteurData----------------
 
@@ -51,4 +76,12 @@ void AuteurData::affiche_auteurData(vector<AuteurData> v){
     for(unsigned int i = 0;i<v.size();i++){
         cout << v[i].nom << " - " << v[i].prenom << endl;
     }
+}
+
+string AuteurData::to_string(const string &separateur){
+    string *res = new string();
+    res->append(nom);
+    res->append(separateur);
+    res->append(prenom);
+    return *res;
 }

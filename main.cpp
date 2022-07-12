@@ -2,7 +2,7 @@
 
 #include <QApplication>
 
-#include "backend/livre.h"
+#include "backend/auteur.h"
 //#include "backend/auteurdata.h"
 
 int main(int argc, char *argv[])
@@ -10,9 +10,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     MainWindow w;
 
-    vector<LivreData> v;
-    Livre::consulter(v);
-    LivreData::affiche_livreData(v);
+    Auteur::exportToFile("backup_auteur.txt");
 
     w.show();
     return a.exec();

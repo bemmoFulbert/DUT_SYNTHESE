@@ -3,6 +3,10 @@
 
 #include <string>
 #include <vector>
+#include <fstream>
+#include <sstream>
+
+#include <QDebug>
 
 #include "BDR_SQLite3.h"
 
@@ -13,6 +17,7 @@ class AuteurData
 public:
     AuteurData(string nom,string prenom);
     static void affiche_auteurData(vector<AuteurData> v);
+    string to_string(const string &separateur=" ");
 
     string nom;
     string prenom;
@@ -26,7 +31,10 @@ class Auteur{
         static bool supprimer(unsigned int id);
         static bool consulter(vector<AuteurData> &auteurs);
 
-        static unsigned int import(string nom_fichier);
+        static bool exportToFile(vector<AuteurData> data,const string &nom_fichier,const string &separateur=" ");
+        static bool exportToFile(const string &nom_fichier,const string &separateur=" ");
+        static unsigned int importToVector(vector<AuteurData> data,string nom_fichier,const string &separateur=" ");//importe dans un tableau dynamique
+        //static unsigned int importToDB(string nom_fichier); // importe dans la base de donnees
     private:
         static BDR_SQLite3 bd;
         static vector<string> vChamps;
