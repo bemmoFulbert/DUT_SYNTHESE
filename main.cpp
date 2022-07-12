@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     //MainWindow w;
 
     vector<AuteurData> v;
-    Adherent::ajouter("bemmo","Yaounde");
+    Adherent::exportToFile("backup_adherent.txt");
 
     //w.show();
     //return a.exec();

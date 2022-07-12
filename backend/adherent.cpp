@@ -56,7 +56,7 @@ bool Adherent::consulterEmprunteurTrieParDate(vector<AdherentData> &adherents,bo
 bool Adherent::exportToFile(vector<AdherentData> data,const string &nom_fichier,const string &separateur){
     ofstream flux(nom_fichier.c_str());
     if(flux){
-        flux << "// fichier d'exportation de livres" <<endl;
+        flux << "// fichier d'exportation de adherents" <<endl;
         flux << "// "<< Util::vectorToString(vChamps,separateur) << endl <<endl;
 
         for(unsigned int i=0;i<data.size();i++){
