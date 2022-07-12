@@ -31,7 +31,7 @@ class Auteur{
 
         static bool exportToFile(vector<AuteurData> data,const string &nom_fichier,const string &separateur=" ");
         static bool exportToFile(const string &nom_fichier,const string &separateur=" ");
-        static unsigned int importToVector(vector<AuteurData> &data,string nom_fichier,const string &separateur=" ");//importe dans un tableau dynamique
+        static unsigned int importToVector(vector<AuteurData> &data,string nom_fichier,const string &separateur=" ");//importe dans un tableau dynamique, retourne le nombre d'elements ajoutes
         static unsigned int importToDB(string nom_fichier,const string &separateur=" "); // met dans la base de donnees
     private:
         static BDR_SQLite3 bd;

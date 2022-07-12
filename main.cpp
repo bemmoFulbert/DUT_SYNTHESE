@@ -3,6 +3,8 @@
 #include <QApplication>
 
 #include "backend/auteur.h"
+#include "backend/livre.h"
+#include "backend/adherent.h"
 #include "backend/util.h"
 
 using namespace std;
@@ -12,8 +14,7 @@ int main(int argc, char *argv[])
     //MainWindow w;
 
     vector<AuteurData> v;
-    Auteur::exportToFile("backup_auteur.txt","---");
-    //cout << Auteur::importToDB("backup_auteur.txt","--");
+    Adherent::ajouter("bemmo","Yaounde");
 
     //w.show();
     //return a.exec();

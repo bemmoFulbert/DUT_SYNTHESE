@@ -39,7 +39,7 @@ bool Auteur::exportToFile(vector<AuteurData> data,const string &nom_fichier,cons
     ofstream flux(nom_fichier.c_str());
     if(flux){
         flux << "// fichier d'exportation d'auteurs" <<endl;
-        flux << "// nom" <<separateur << "prenom" << endl <<endl;
+        flux << "// " << Util::vectorToString(vChamps,separateur)  << endl <<endl;
 
         for(unsigned int i=0;i<data.size();i++){
             flux << data[i].to_string(separateur) <<endl;
@@ -70,11 +70,7 @@ unsigned int Auteur::importToVector(vector<AuteurData> &data,string nom_fichier,
         while(getline(flux,ligne)){
             vector<string> dataTemp;
 
-            //pour la prise en charge des commantaires
-            if(ligne[0] == '/' && ligne[1] == '/'){}
-            else if(ligne[0] == '#'){}
-            else if(ligne.empty()){}
-            //pour la prise en charge des commantaires
+            if(Util::isComment(ligne)){}
             else{
                 dataTemp = Util::splitString(ligne,separateur);
 

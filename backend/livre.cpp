@@ -57,6 +57,67 @@ bool Livre::consulterLivresEmprunterTrieParDate(vector<LivreData> &livres,bool i
     }
 }
 
+bool Livre::exportToFile(vector<LivreData> data,const string &nom_fichier,const string &separateur){
+    ofstream flux(nom_fichier.c_str());
+    if(flux){
+        flux << "// fichier d'exportation de livres" <<endl;
+        flux << "// "<< Util::vectorToString(vChamps,separateur) << endl <<endl;
+
+        for(unsigned int i=0;i<data.size();i++){
+            flux << data[i].to_string(separateur) <<endl;
+        }
+        return true;
+    }
+    else {
+        cout << "erreur d'ouverture du fichier \"" << nom_fichier << "\"" << endl;
+        return false;
+    }
+}
+
+bool Livre::exportToFile(const string &nom_fichier,const string &separateur){
+    vector<LivreData> data;
+    if(consulter(data)){
+           return exportToFile(data,nom_fichier,separateur);
+    }
+    else return false;
+}
+
+unsigned int Livre::importToVector(vector<LivreData> &data,string nom_fichier,const string &separateur){
+    ifstream flux (nom_fichier);
+    string ligne;
+    unsigned int i =0;
+
+    if(flux){
+        while(getline(flux,ligne)){
+            vector<string> dataTemp;
+
+            if(Util::isComment(ligne)){}
+            else{
+                dataTemp = Util::splitString(ligne,separateur);
+
+                LivreData ad(dataTemp[0],dataTemp[1],stoi(dataTemp[2]),stoi(dataTemp[3]),stoi(dataTemp[4]));
+                data.push_back(ad);
+                i++;
+            }
+        }
+        return i;
+    }
+    else{
+        cout << "erreur d'ouverture du fichier \"" << nom_fichier << "\"" << endl;
+        return 0;
+    }
+}
+
+unsigned int Livre::importToDB(string nom_fichier,const string &separateur){
+    vector<LivreData> data;
+
+    unsigned int nbrAjout = importToVector(data,nom_fichier,separateur);
+
+    for(unsigned int i=0;i<data.size();i++){
+        ajouter(data[i].titre,data[i].dateDePublication,data[i].id_auteur);
+    }
+    return nbrAjout;
+}
 
 //----------LivreData-----------------
 
@@ -77,4 +138,14 @@ void LivreData::affiche_livreData(vector<LivreData> v){
     for(unsigned int i = 0;i<v.size();i++){
         cout << v[i].titre << " - " << v[i].dateDePublication << " - " << v[i].nbreExemplairesTotal << " - "<< v[i].nbreExemplairesEmprunter << " - "<< v[i].id_auteur << endl;
     }
+}
+
+string LivreData::to_string(const string &separateur){
+    string *res = new string();
+    res->append(titre); res->append(separateur);
+    res->append(dateDePublication); res->append(separateur);
+    res->append(std::to_string(nbreExemplairesTotal)); res->append(separateur);
+    res->append(std::to_string(nbreExemplairesEmprunter)); res->append(separateur);
+    res->append(std::to_string(id_auteur));
+    return *res;
 }

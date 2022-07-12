@@ -23,3 +23,10 @@ string Util::vectorToString(const vector<string> &v,const string &separateur){
     }
     return res;
 }
+
+bool Util::isComment(const string &ligne){
+    if(ligne[0] == '/' && ligne[1] == '/'){return true;}
+    else if(ligne[0] == '#'){return true;}
+    else if(ligne.empty()){return true;}
+    else return false;
+}

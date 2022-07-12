@@ -53,6 +53,68 @@ bool Adherent::consulterEmprunteurTrieParDate(vector<AdherentData> &adherents,bo
     }
 }
 
+bool Adherent::exportToFile(vector<AdherentData> data,const string &nom_fichier,const string &separateur){
+    ofstream flux(nom_fichier.c_str());
+    if(flux){
+        flux << "// fichier d'exportation de livres" <<endl;
+        flux << "// "<< Util::vectorToString(vChamps,separateur) << endl <<endl;
+
+        for(unsigned int i=0;i<data.size();i++){
+            flux << data[i].to_string(separateur) <<endl;
+        }
+        return true;
+    }
+    else {
+        cout << "erreur d'ouverture du fichier \"" << nom_fichier << "\"" << endl;
+        return false;
+    }
+}
+
+bool Adherent::exportToFile(const string &nom_fichier,const string &separateur){
+    vector<AdherentData> data;
+    if(consulter(data)){
+           return exportToFile(data,nom_fichier,separateur);
+    }
+    else return false;
+}
+
+unsigned int Adherent::importToVector(vector<AdherentData> &data,string nom_fichier,const string &separateur){
+    ifstream flux (nom_fichier);
+    string ligne;
+    unsigned int i =0;
+
+    if(flux){
+        while(getline(flux,ligne)){
+            vector<string> dataTemp;
+
+            if(Util::isComment(ligne)){}
+            else{
+                dataTemp = Util::splitString(ligne,separateur);
+
+                AdherentData ad(dataTemp[0],dataTemp[1],stoi(dataTemp[2]));
+                data.push_back(ad);
+                i++;
+            }
+        }
+        return i;
+    }
+    else{
+        cout << "erreur d'ouverture du fichier \"" << nom_fichier << "\"" << endl;
+        return 0;
+    }
+}
+
+unsigned int Adherent::importToDB(string nom_fichier,const string &separateur){
+    vector<AdherentData> data;
+
+    unsigned int nbrAjout = importToVector(data,nom_fichier,separateur);
+
+    for(unsigned int i=0;i<data.size();i++){
+        ajouter(data[i].nom,data[i].addresse);
+    }
+    return nbrAjout;
+}
+
 //----------------AdherentData--------------
 
 AdherentData::AdherentData(string nom,
@@ -61,4 +123,12 @@ AdherentData::AdherentData(string nom,
     this->nom = nom;
     this->addresse = addresse;
     this->nbreLivresEmprunter = nbreLivresEmprunter;
+}
+
+string AdherentData::to_string(const string &separateur){
+    string *res = new string();
+    res->append(nom); res->append(separateur);
+    res->append(addresse); res->append(separateur);
+    res->append(std::to_string(nbreLivresEmprunter));
+    return *res;
 }
