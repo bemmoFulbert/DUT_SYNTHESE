@@ -15,7 +15,7 @@ class AuteurData
 public:
     AuteurData(string nom,string prenom);
     static void affiche_auteurData(vector<AuteurData> v);
-    string to_string(const string &separateur=" ");
+    const string to_string(const string &separateur=" ");
 
     string nom;
     string prenom;
@@ -29,7 +29,7 @@ class Auteur{
         static bool supprimer(unsigned int id);
         static bool consulter(vector<AuteurData> &auteurs);
 
-        static bool exportToFile(vector<AuteurData> data,const string &nom_fichier,const string &separateur=" ");
+        static bool exportToFile(vector<AuteurData> &data,const string &nom_fichier,const string &separateur=" ");
         static bool exportToFile(const string &nom_fichier,const string &separateur=" ");
         static unsigned int importToVector(vector<AuteurData> &data,string nom_fichier,const string &separateur=" ");//importe dans un tableau dynamique, retourne le nombre d'elements ajoutes
         static unsigned int importToDB(string nom_fichier,const string &separateur=" "); // met dans la base de donnees

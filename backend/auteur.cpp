@@ -35,7 +35,7 @@ bool Auteur::consulter(vector<AuteurData> &auteurs){
     return true;
 }
 
-bool Auteur::exportToFile(vector<AuteurData> data,const string &nom_fichier,const string &separateur){
+bool Auteur::exportToFile(vector<AuteurData> &data, const string &nom_fichier, const string &separateur){
     ofstream flux(nom_fichier.c_str());
     if(flux){
         flux << "// fichier d'exportation d'auteurs" <<endl;
@@ -111,7 +111,7 @@ void AuteurData::affiche_auteurData(vector<AuteurData> v){
     }
 }
 
-string AuteurData::to_string(const string &separateur){
+const string AuteurData::to_string(const string &separateur){
     string *res = new string();
     res->append(nom);
     res->append(separateur);

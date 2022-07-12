@@ -16,7 +16,7 @@ class AdherentData{
         AdherentData(string nom,
             string addresse,
             unsigned int nbreLivresEmprunter);
-        string to_string(const string &separateur);
+        const string to_string(const string &separateur);
 
         string nom;
         string addresse;
@@ -37,7 +37,7 @@ class Adherent{
             static bool consulterEmprunteurTrieParNom(vector<AdherentData> &adherents,bool isAsc=true);
             static bool consulterEmprunteurTrieParDate(vector<AdherentData> &adherents,bool isAsc=true);
 
-            static bool exportToFile(vector<AdherentData> data,const string &nom_fichier,const string &separateur=" ");
+            static bool exportToFile(vector<AdherentData> &data,const string &nom_fichier,const string &separateur=" ");
             static bool exportToFile(const string &nom_fichier,const string &separateur=" ");
             static unsigned int importToVector(vector<AdherentData> &data,string nom_fichier,const string &separateur=" ");//importe dans un tableau dynamique, retourne le nombre d'elements ajoutes
             static unsigned int importToDB(string nom_fichier,const string &separateur=" "); // met dans la base de donnees

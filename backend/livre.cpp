@@ -57,7 +57,7 @@ bool Livre::consulterLivresEmprunterTrieParDate(vector<LivreData> &livres,bool i
     }
 }
 
-bool Livre::exportToFile(vector<LivreData> data,const string &nom_fichier,const string &separateur){
+bool Livre::exportToFile(vector<LivreData> &data, const string &nom_fichier, const string &separateur){
     ofstream flux(nom_fichier.c_str());
     if(flux){
         flux << "// fichier d'exportation de livres" <<endl;
@@ -140,7 +140,7 @@ void LivreData::affiche_livreData(vector<LivreData> v){
     }
 }
 
-string LivreData::to_string(const string &separateur){
+const string LivreData::to_string(const string &separateur){
     string *res = new string();
     res->append(titre); res->append(separateur);
     res->append(dateDePublication); res->append(separateur);

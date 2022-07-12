@@ -13,8 +13,8 @@ int main(int argc, char *argv[])
     //QApplication a(argc, argv);
     //MainWindow w;
 
-    vector<AuteurData> v;
-    Adherent::exportToFile("backup_adherent.txt");
+    //vector<AuteurData> v;
+    Adherent::importToDB("backup_adherent.txt");
 
     //w.show();
     //return a.exec();

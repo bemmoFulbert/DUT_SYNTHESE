@@ -4,8 +4,7 @@ BDR_SQLite3 Adherent::bd("dut_puc2442_proj.db");
 vector<string> Adherent::vChamps = {"nom","addresse","nbreLivresEmprunter"};
 
 bool Adherent::ajouter(const string nom,const string addresse){
-    vector<string> vChamps = {"nom","addresse"};
-    vector<string> vValeurs = {"'"+nom+"'","'"+addresse+"'"};
+    vector<string> vValeurs = {"'"+nom+"'","'"+addresse+"'","'"+to_string(0)+"'"};
 
     return bd.ajouter("adherent",vChamps,vValeurs);
 }
@@ -25,7 +24,7 @@ bool Adherent::supprimer(unsigned int id){
 bool Adherent::consulter(vector<AdherentData> &adherents,const string &condition){
     vector<string> vValeurs;
 
-    if(!bd.consulter("livre",vChamps,vValeurs,condition)) return false;
+    if(!bd.consulter("adherent",vChamps,vValeurs,condition)) return false;
 
     for(unsigned int i=0;i<vValeurs.size();i+=vChamps.size()){
         AdherentData data(vValeurs[i],vValeurs[i+1],stoi(vValeurs[i+2]));
@@ -53,7 +52,7 @@ bool Adherent::consulterEmprunteurTrieParDate(vector<AdherentData> &adherents,bo
     }
 }
 
-bool Adherent::exportToFile(vector<AdherentData> data,const string &nom_fichier,const string &separateur){
+bool Adherent::exportToFile(vector<AdherentData> &data,const string &nom_fichier,const string &separateur){
     ofstream flux(nom_fichier.c_str());
     if(flux){
         flux << "// fichier d'exportation de adherents" <<endl;
@@ -125,7 +124,7 @@ AdherentData::AdherentData(string nom,
     this->nbreLivresEmprunter = nbreLivresEmprunter;
 }
 
-string AdherentData::to_string(const string &separateur){
+const string AdherentData::to_string(const string &separateur){
     string *res = new string();
     res->append(nom); res->append(separateur);
     res->append(addresse); res->append(separateur);
