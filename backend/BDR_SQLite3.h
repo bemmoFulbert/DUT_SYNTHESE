@@ -6,7 +6,12 @@
 
 
 /*
+    Initially written by tjordan on the 10th July 2022
+*/
+
+/*
     Could enable the object to provide sqlite3_error_code on errors
+    (vector<unsigned int> ids) could become (vector<string> ids) for more generic ids(they may not necessarily be integers !!!)
 */
 class BDR_SQLite3{
     private:
@@ -136,9 +141,38 @@ class BDR_SQLite3{
             return true;
         };
 
-        //Consulte tout les champs
+        //Consulter les champs avec les ids
+        bool consulter(const string &nomTable,const vector<unsigned int> &ids,const vector<string> &nomChamps,vector<string> &valeurs,const string &cond="",const string &concat="",const string &nomChampID="id"){
+            string condID = "";
+
+            char id_str[512];
+            for (unsigned int i = 0 ; i < ids.size() ; i++){
+                sprintf(id_str,"%u",ids[i]);
+                condID += nomChampID + "=" + id_str + ((i == ids.size()-1) ? "" : " OR ");
+            }
+
+            if (!cond[0]){
+                return consulter(nomTable,nomChamps,valeurs, + "WHERE (" + condID + ") " + concat);
+            }
+            return consulter(nomTable,nomChamps,valeurs, + "WHERE (" + condID + " AND (" + cond + ")) " + concat);
+        };
+
+
+
+        //Consulte tout les champs d'une table
         bool consulter(const string &nomTable,vector<string> &valeurs,const string &concat=""){
             return consulter(nomTable,{"*"},valeurs,concat);
+        };
+
+        //Consulte des champs de plusieurs table
+        bool consulter(const vector<string> &nomTables,const vector<vector<string>> &tabNomChamps,vector<string> &valeurs,const string &concat=""){
+            char *err_msg;
+            if (sqlite3_exec(db_handle,WeakSQLCommandGenerator::SelectFromManyTables(nomTables,tabNomChamps,concat).c_str(),consulter_cb,(void*)&valeurs,&err_msg) != 0){
+                cerr << "*Fatale* BDR_SQLite::consulter : " << err_msg << endl;
+                sqlite3_free(err_msg);
+                return false;
+            }
+            return true;
         };
 
     private:
