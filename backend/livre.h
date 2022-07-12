@@ -37,6 +37,7 @@ class Livre{
             static bool consulterLivresEmprunterTrieParDate(vector<LivreData> &livres,bool isAsc); //par la date de l'emprunte
         private:
             static BDR_SQLite3 bd;
+            static vector<string> vChamps;
     };
 
 #endif // LIVRE_H

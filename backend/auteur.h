@@ -25,8 +25,11 @@ class Auteur{
         static bool modifierPrenom(unsigned int id,const string &prenom);
         static bool supprimer(unsigned int id);
         static bool consulter(vector<AuteurData> &auteurs);
+
+        static unsigned int import(string nom_fichier);
     private:
         static BDR_SQLite3 bd;
+        static vector<string> vChamps;
 };
 
 #endif // AUTEUR_H

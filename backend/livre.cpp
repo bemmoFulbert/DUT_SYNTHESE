@@ -6,20 +6,20 @@
 #include "BDR_SQLite3.h"
 
 BDR_SQLite3 Livre::bd("dut_puc2442_proj.db");
+vector<string> Livre::vChamps = {"titre","dateDePub","nbreExemplairesTotal","nbreExemplairesEmprunter","id_auteur"};
 
 bool Livre::ajouter(const string titre,const string dateDePublication,unsigned int id_auteur){
-    vector<string> vChamps = {"titre","dateDePub","nbreExemplairesTotal","nbreExemplairesEmprunter","id_auteur"};
     vector<string> vValeurs = {"'"+titre+"'","'"+dateDePublication+"'","'"+to_string(100)+"'","'"+to_string(0)+"'","'"+to_string(id_auteur)+"'"};
 
     return bd.ajouter("livre",vChamps,vValeurs);
 }
 
 bool Livre::modifierTitre(unsigned int id,const string titre){
-    return bd.modifier("livre",{id},{"titre"},{"'"+titre+"'"},"","id");
+    return bd.modifier("livre",{id},{vChamps[0]},{"'"+titre+"'"},"","id");
 }
 
 bool Livre::modifierDateDePublication(unsigned int id,const string dateDePublication){
-    return bd.modifier("livre",{id},{"dateDePub"},{"'"+dateDePublication+"'"},"","id");
+    return bd.modifier("livre",{id},{vChamps[1]},{"'"+dateDePublication+"'"},"","id");
 }
 
 bool Livre::supprimer(unsigned int id){
@@ -27,12 +27,11 @@ bool Livre::supprimer(unsigned int id){
 }
 
 bool Livre::consulter(vector<LivreData> &livres,const string &condition){
-    vector<string> vChamps = {"titre","dateDePub","nbreExemplairesTotal","nbreExemplairesEmprunter","id_auteur"};
     vector<string> vValeurs;
 
     if(!bd.consulter("livre",vChamps,vValeurs,condition)) return false;
 
-    for(unsigned int i=0;i<vValeurs.size();i+=5){
+    for(unsigned int i=0;i<vValeurs.size();i+=vChamps.size()){
         LivreData data(vValeurs[i],vValeurs[i+1],stoi(vValeurs[i+2]),stoi(vValeurs[i+3]),stoi(vValeurs[i+4]));
         livres.push_back(data);
     }

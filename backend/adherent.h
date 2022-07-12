@@ -36,5 +36,6 @@ class Adherent{
             static bool consulterEmprunteurTrieParDate(vector<AdherentData> &adherents,bool isAsc=true);
     private:
         static BDR_SQLite3 bd;
+        static vector<string> vChamps ;
     };
 #endif // ADHERENT_H
