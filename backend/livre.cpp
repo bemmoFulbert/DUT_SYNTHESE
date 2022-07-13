@@ -133,7 +133,15 @@ LivreData::LivreData(string titre,
     this->nbreExemplairesEmprunter = nbreExemplairesEmprunter;
     this->id_auteur = id_auteur;
 }
-
+LivreData::LivreData(unsigned int id,
+    string titre,
+    string dateDePublication,
+    unsigned int nbreExemplairesTotal,
+    unsigned int nbreExemplairesEmprunter,
+          unsigned int id_auteur):
+LivreData(titre,dateDePublication,nbreExemplairesTotal,nbreExemplairesEmprunter,id_auteur){
+    this->id = id;
+}
 void LivreData::affiche_livreData(vector<LivreData> v){
     for(unsigned int i = 0;i<v.size();i++){
         cout << v[i].titre << " - " << v[i].dateDePublication << " - " << v[i].nbreExemplairesTotal << " - "<< v[i].nbreExemplairesEmprunter << " - "<< v[i].id_auteur << endl;

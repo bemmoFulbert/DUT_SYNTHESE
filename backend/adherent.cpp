@@ -124,6 +124,11 @@ AdherentData::AdherentData(string nom,
     this->nbreLivresEmprunter = nbreLivresEmprunter;
 }
 
+AdherentData::AdherentData(unsigned int id,string nom,string addresse,unsigned int nbreLivresEmprunter):
+AdherentData(nom,addresse,nbreLivresEmprunter){
+    this->id = id;
+}
+
 const string AdherentData::to_string(const string &separateur){
     string *res = new string();
     res->append(nom); res->append(separateur);

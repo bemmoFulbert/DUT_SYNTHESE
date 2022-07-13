@@ -16,9 +16,16 @@ class LivreData{
             unsigned int nbreExemplairesTotal,
             unsigned int nbreExemplairesEmprunter,
             unsigned int id_auteur);
+        LivreData(unsigned int id,
+            string titre,
+            string dateDePublication,
+            unsigned int nbreExemplairesTotal,
+            unsigned int nbreExemplairesEmprunter,
+            unsigned int id_auteur);
         static void affiche_livreData(vector<LivreData> v);
         const string to_string(const string &separateur=" ");
 
+        unsigned int id = -1;
         string titre;
         string dateDePublication;
         unsigned int nbreExemplairesTotal;

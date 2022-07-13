@@ -105,6 +105,11 @@ AuteurData::AuteurData(string nom,string prenom){
     this->prenom = prenom;
 }
 
+AuteurData::AuteurData(unsigned int id,string nom,string prenom):
+AuteurData(nom,prenom){
+    this->id = id;
+}
+
 void AuteurData::affiche_auteurData(vector<AuteurData> v){
     for(unsigned int i = 0;i<v.size();i++){
         cout << v[i].nom << " - " << v[i].prenom << endl;

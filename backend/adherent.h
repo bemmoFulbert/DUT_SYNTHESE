@@ -16,8 +16,12 @@ class AdherentData{
         AdherentData(string nom,
             string addresse,
             unsigned int nbreLivresEmprunter);
+        AdherentData(unsigned int id,string nom,
+            string addresse,
+            unsigned int nbreLivresEmprunter);
         const string to_string(const string &separateur);
 
+        unsigned int id = -1;
         string nom;
         string addresse;
         unsigned int nbreLivresEmprunter;

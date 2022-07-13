@@ -14,9 +14,11 @@ class AuteurData
 {
 public:
     AuteurData(string nom,string prenom);
+    AuteurData(unsigned int id,string nom,string prenom);
     static void affiche_auteurData(vector<AuteurData> v);
     const string to_string(const string &separateur=" ");
 
+    unsigned int id = -1;
     string nom;
     string prenom;
 };
