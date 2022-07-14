@@ -37,12 +37,17 @@ class LivreData{
 class Livre{
         public:
             static bool ajouter(const string titre,const string dateDePublication,unsigned int id_auteur);
-            static bool modifierTitre(unsigned int id,const string titre);
-            static bool modifierDateDePublication(unsigned int id,const string dateDePublication);
+            static bool modifierTitre(unsigned int id,const string &titre);
+            static bool modifierDateDePublication(unsigned int id,const string &dateDePublication);
             static bool supprimer(unsigned int id);
-            static bool consulter(vector<LivreData> &livres,const string &condition="");
+            static bool consulter(vector<LivreData> &livres,const string &concat="");
 
-//            static bool ajouterNbreDeCopies(unsigned int id,unsigned int nbreAAjouter);
+            static bool modifierTitre(const vector<unsigned int> &ids, const string &titre);
+            static bool modifierDateDePublication(const vector<unsigned int> &ids,const string &DateDePublication);
+            static bool supprimer(const vector<unsigned int> &ids);
+            static bool consulter(vector<LivreData> &livres,const vector<unsigned int> &ids,const string &condition="",const string &concat="");
+
+//          static bool ajouterNbreDeCopies(unsigned int id,unsigned int nbreAAjouter);
             static bool consulterLivresEmprunterTrieParNom(vector<LivreData> &livres,bool isAsc=true);
             static bool consulterLivresEmprunterTrieParDate(vector<LivreData> &livres,bool isAsc); //par la date de l'emprunte
 
@@ -53,6 +58,7 @@ class Livre{
         private:
             static BDR_SQLite3 bd;
             static vector<string> vChamps;
+            static string nomTable;
     };
 
 #endif // LIVRE_H

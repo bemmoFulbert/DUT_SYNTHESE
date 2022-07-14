@@ -2,29 +2,56 @@
 
 BDR_SQLite3 Adherent::bd("dut_puc2442_proj.db");
 vector<string> Adherent::vChamps = {"nom","addresse","nbreLivresEmprunter"};
+string Adherent::nomTable = "adherent";
+
 
 bool Adherent::ajouter(const string nom,const string addresse){
     vector<string> vValeurs = {"'"+nom+"'","'"+addresse+"'","'"+to_string(0)+"'"};
 
-    return bd.ajouter("adherent",vChamps,vValeurs);
+    return bd.ajouter(nomTable,vChamps,vValeurs);
 }
 
-bool Adherent::modifierNom(unsigned int id,const string nom){
-    return bd.modifier("adherent",{id},{vChamps[0]},{"'"+nom+"'"},"","id");
+bool Adherent::modifierNom(unsigned int id,const string &nom){
+    return bd.modifier(nomTable,{id},{vChamps[0]},{"'"+nom+"'"},"","id");
+}
+
+bool Adherent::modifierNom(const vector<unsigned int> &ids, const string &nom){
+    return bd.modifier(nomTable,ids,{vChamps[0]},{"'"+nom+"'"},"","id");
 }
 
 bool Adherent::modifierAddresse(unsigned int id,const string addresse){
-    return bd.modifier("adherent",{id},{vChamps[1]},{"'"+addresse+"'"},"","id");
+    return bd.modifier(nomTable,{id},{vChamps[1]},{"'"+addresse+"'"},"","id");
+}
+
+bool Adherent::modifierAddresse(const vector<unsigned int> &ids,const string &addresse){
+    return bd.modifier(nomTable,ids,{vChamps[1]},{"'"+addresse+"'"},"","id");
 }
 
 bool Adherent::supprimer(unsigned int id){
-    return bd.supprimer("adherent",{id},"id");
+    return bd.supprimer(nomTable,{id},"id");
 }
 
-bool Adherent::consulter(vector<AdherentData> &adherents,const string &condition){
+bool Adherent::supprimer(const vector<unsigned int> &ids){
+    return bd.supprimer(nomTable,ids);
+}
+
+bool Adherent::consulter(vector<AdherentData> &adherents,const string &concat){
     vector<string> vValeurs;
 
-    if(!bd.consulter("adherent",vChamps,vValeurs,condition)) return false;
+    if(!bd.consulter(nomTable,vChamps,vValeurs,concat)) return false;
+
+    for(unsigned int i=0;i<vValeurs.size();i+=vChamps.size()){
+        AdherentData data(vValeurs[i],vValeurs[i+1],stoi(vValeurs[i+2]));
+        adherents.push_back(data);
+    }
+
+    return true;
+}
+
+bool Adherent::consulter(vector<AdherentData> &adherents,const vector<unsigned int> &ids,const string &condition,const string &concat){
+    vector<string> vValeurs;
+
+    if(!bd.consulter(nomTable,ids,vChamps,vValeurs,condition,concat)) return false;
 
     for(unsigned int i=0;i<vValeurs.size();i+=vChamps.size()){
         AdherentData data(vValeurs[i],vValeurs[i+1],stoi(vValeurs[i+2]));

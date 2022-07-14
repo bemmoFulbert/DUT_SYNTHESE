@@ -2,36 +2,60 @@
 
 BDR_SQLite3 Auteur::bd("dut_puc2442_proj.db");
 vector<string> Auteur::vChamps = {"nom","prenom"};
+string Auteur::nomTable = "auteur";
 
 bool Auteur::ajouter(const string &nom,const string &prenom){
-    vector<string> vChamps = {"nom","prenom"};
     vector<string> vValeurs = {"'"+nom+"'","'"+prenom+"'"};
 
-    return bd.ajouter("auteur",vChamps,vValeurs);
+    return bd.ajouter(nomTable,vChamps,vValeurs);
+}
+
+bool Auteur::modifierNom(const vector<unsigned int> &ids,const string &nom){
+    return bd.modifier(nomTable,ids,{vChamps[0]},{"'"+nom+"'"});
 }
 
 bool Auteur::modifierNom(unsigned int id,const string &nom){
-    return bd.modifier("auteur",{id},{vChamps[0]},{"'"+nom+"'"},"","id");
+    return bd.modifier(nomTable,{id},{vChamps[0]},{"'"+nom+"'"},"","id");
 }
 
 bool Auteur::modifierPrenom(unsigned int id,const string &prenom){
-    return bd.modifier("auteur",{id},{vChamps[1]},{"'"+prenom+"'"},"","id");
+    return bd.modifier(nomTable,{id},{vChamps[1]},{"'"+prenom+"'"},"","id");
+}
+
+bool Auteur::modifierPrenom(const vector<unsigned int> &ids,const string &prenom){
+    return bd.modifier(nomTable,ids,{vChamps[1]},{"'"+prenom+"'"},"","id");
 }
 
 bool Auteur::supprimer(unsigned int id){
-    return bd.supprimer("auteur",{id},"id");
+    return bd.supprimer(nomTable,{id},"id");
 }
 
-bool Auteur::consulter(vector<AuteurData> &auteurs){
+bool Auteur::supprimer(const vector<unsigned int> &ids){
+    return bd.supprimer(nomTable,ids);
+}
+
+bool Auteur::consulter(vector<AuteurData> &auteurs,const string &concat){
     vector<string> vValeurs;
 
-    if(!bd.consulter("auteur",vChamps,vValeurs)) return false;
+    if(!bd.consulter(nomTable,vChamps,vValeurs,concat)) return false;
 
     for(unsigned int i=0;i<vValeurs.size();i+=vChamps.size()){
         AuteurData data(vValeurs[i],vValeurs[i+1]);
         auteurs.push_back(data);
     }
 
+    return true;
+}
+
+bool Auteur::consulter(vector<AuteurData> &auteurs,const vector<unsigned int> &ids){
+    vector<string> vValeurs;
+
+    if(!bd.consulter(nomTable,ids,vChamps,vValeurs)) return false;
+
+    for(unsigned int i=0;i<vValeurs.size();i+=vChamps.size()){
+        AuteurData data(vValeurs[i],vValeurs[i+1]);
+        auteurs.push_back(data);
+    }
     return true;
 }
 

@@ -30,10 +30,15 @@ class AdherentData{
 class Adherent{
         public:
             static bool ajouter(const string nom,const string addresse);
-            static bool modifierNom(unsigned int id,const string nom);
+            static bool modifierNom(unsigned int id,const string &nom);
             static bool modifierAddresse(unsigned int id,const string addresse);
             static bool supprimer(unsigned int id);
-            static bool consulter(vector<AdherentData> &adherents,const string &condition="");
+            static bool consulter(vector<AdherentData> &adherents,const string &concat="");
+
+            static bool modifierNom(const vector<unsigned int> &ids, const string &nom);
+            static bool modifierAddresse(const vector<unsigned int> &ids,const string &addresse);
+            static bool supprimer(const vector<unsigned int> &ids);
+            static bool consulter(vector<AdherentData> &adherents,const vector<unsigned int> &ids,const string &condition="",const string &concat="");
 
 //            static bool emprunterLivre(unsigned int id_livre);
 //            static bool rendreLivre(unsigned int id_livre);
@@ -48,5 +53,6 @@ class Adherent{
     private:
         static BDR_SQLite3 bd;
         static vector<string> vChamps ;
+        static string nomTable;
     };
 #endif // ADHERENT_H

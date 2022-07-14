@@ -25,11 +25,17 @@ public:
 
 class Auteur{
     public:
+
         static bool ajouter(const string &nom,const string &prenom);
         static bool modifierNom(unsigned int id,const string &nom);
         static bool modifierPrenom(unsigned int id,const string &prenom);
         static bool supprimer(unsigned int id);
-        static bool consulter(vector<AuteurData> &auteurs);
+        static bool consulter(vector<AuteurData> &auteurs,const string &concat="");
+
+        static bool modifierNom(const vector<unsigned int> &ids,const string &nom);
+        static bool modifierPrenom(const vector<unsigned int> &ids,const string &prenom);
+        static bool supprimer(const vector<unsigned int> &ids);
+        static bool consulter(vector<AuteurData> &auteurs,const vector<unsigned int> &ids);
 
         static bool exportToFile(vector<AuteurData> &data,const string &nom_fichier,const string &separateur=" ");
         static bool exportToFile(const string &nom_fichier,const string &separateur=" ");
@@ -38,6 +44,7 @@ class Auteur{
     private:
         static BDR_SQLite3 bd;
         static vector<string> vChamps;
+        static string nomTable;
 };
 
 #endif // AUTEUR_H

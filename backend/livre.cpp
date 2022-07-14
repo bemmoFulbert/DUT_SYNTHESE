@@ -7,35 +7,60 @@
 
 BDR_SQLite3 Livre::bd("dut_puc2442_proj.db");
 vector<string> Livre::vChamps = {"titre","dateDePub","nbreExemplairesTotal","nbreExemplairesEmprunter","id_auteur"};
+string Livre::nomTable = "livre";
 
 bool Livre::ajouter(const string titre,const string dateDePublication,unsigned int id_auteur){
     vector<string> vValeurs = {"'"+titre+"'","'"+dateDePublication+"'","'"+to_string(100)+"'","'"+to_string(0)+"'","'"+to_string(id_auteur)+"'"};
 
-    return bd.ajouter("livre",vChamps,vValeurs);
+    return bd.ajouter(nomTable,vChamps,vValeurs);
 }
 
-bool Livre::modifierTitre(unsigned int id,const string titre){
-    return bd.modifier("livre",{id},{vChamps[0]},{"'"+titre+"'"},"","id");
+bool Livre::modifierTitre(unsigned int id,const string &titre){
+    return bd.modifier(nomTable,{id},{vChamps[0]},{"'"+titre+"'"},"","id");
 }
 
-bool Livre::modifierDateDePublication(unsigned int id,const string dateDePublication){
-    return bd.modifier("livre",{id},{vChamps[1]},{"'"+dateDePublication+"'"},"","id");
+bool Livre::modifierTitre(const vector<unsigned int> &ids,const string &titre){
+    return bd.modifier(nomTable,ids,{vChamps[0]},{"'"+titre+"'"},"","id");
+}
+
+bool Livre::modifierDateDePublication(unsigned int id,const string &dateDePublication){
+    return bd.modifier(nomTable,{id},{vChamps[1]},{"'"+dateDePublication+"'"},"","id");
+}
+
+bool Livre::modifierDateDePublication(const vector<unsigned int> &ids,const string &dateDePublication){
+    return bd.modifier(nomTable,ids,{vChamps[1]},{"'"+dateDePublication+"'"},"","id");
 }
 
 bool Livre::supprimer(unsigned int id){
-    return bd.supprimer("livre",{id},"id");
+    return bd.supprimer(nomTable,{id},"id");
 }
 
-bool Livre::consulter(vector<LivreData> &livres,const string &condition){
+bool Livre::supprimer(const vector<unsigned int> &ids){
+    return bd.supprimer(nomTable,ids);
+}
+
+bool Livre::consulter(vector<LivreData> &livres,const string &concat){
     vector<string> vValeurs;
 
-    if(!bd.consulter("livre",vChamps,vValeurs,condition)) return false;
+    if(!bd.consulter(nomTable,vChamps,vValeurs,concat)) return false;
 
     for(unsigned int i=0;i<vValeurs.size();i+=vChamps.size()){
         LivreData data(vValeurs[i],vValeurs[i+1],stoi(vValeurs[i+2]),stoi(vValeurs[i+3]),stoi(vValeurs[i+4]));
         livres.push_back(data);
     }
 
+    return true;
+}
+
+bool Livre::consulter(vector<LivreData> &livres,const vector<unsigned int> &ids,const string &condition,const string &concat){
+    vector<string> vValeurs;
+
+    if(!bd.consulter(nomTable,ids,vChamps,vValeurs,condition,concat)) return false;
+
+    for(unsigned int i=0;i<vValeurs.size();i+=vChamps.size()){
+        LivreData data(vValeurs[i],vValeurs[i+1],stoi(vValeurs[i+2]),stoi(vValeurs[i+3]),stoi(vValeurs[i+4]));
+        livres.push_back(data);
+    }
     return true;
 }
 

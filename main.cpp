@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     //MainWindow w;
 
     //vector<AuteurData> v;
-    Adherent::importToDB("backup_adherent.txt");
+    Livre::modifierDateDePublication({2,3,4},"1999-02-02");
 
     //w.show();
     //return a.exec();
