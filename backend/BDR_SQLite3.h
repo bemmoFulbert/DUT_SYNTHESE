@@ -23,7 +23,7 @@ class BDR_SQLite3{
             filename = nomFichierBD;
             is_open = ((sqlite3_open(nomFichierBD.c_str(),&db_handle) == SQLITE_OK) ? true : false);
             if (!is_open){
-                cerr << "BDR_SQLite:: " << this << " n'a pas pu être ouvert" << endl;
+                cerr << "*Avertissement* BDR_SQLite:: " << this << " n'a pas pu être ouvert" << endl;
             }
         };
         ~BDR_SQLite3(){
@@ -141,7 +141,7 @@ class BDR_SQLite3{
             return true;
         };
 
-        //Consulter les champs avec les ids
+        //Consulter les champs avec les ids(entiers)
         bool consulter(const string &nomTable,const vector<unsigned int> &ids,const vector<string> &nomChamps,vector<string> &valeurs,const string &cond="",const string &concat="",const string &nomChampID="id"){
             string condID = "";
 
@@ -157,6 +157,20 @@ class BDR_SQLite3{
             return consulter(nomTable,nomChamps,valeurs, + "WHERE (" + condID + " AND (" + cond + ")) " + concat);
         };
 
+        //Consulter les champs avec les ids(chaine de charactéres)
+        bool consulter(const string &nomTable,const vector<string> &ids,const vector<string> &nomChamps,vector<string> &valeurs,const string &cond="",const string &concat="",const string &nomChampID="id"){
+            string condID = "";
+
+            for (unsigned int i = 0 ; i < ids.size() ; i++){
+                condID += nomChampID + "=" + ids[i] + ((i == ids.size()-1) ? "" : " OR ");
+            }
+
+            if (!cond[0]){
+                return consulter(nomTable,nomChamps,valeurs, + "WHERE (" + condID + ") " + concat);
+            }
+            return consulter(nomTable,nomChamps,valeurs, + "WHERE (" + condID + " AND (" + cond + ")) " + concat);
+        };
+
 
 
         //Consulte tout les champs d'une table
@@ -164,7 +178,7 @@ class BDR_SQLite3{
             return consulter(nomTable,{"*"},valeurs,concat);
         };
 
-        //Consulte des champs de plusieurs table
+        //Consulte des champs de plusieurs tables
         bool consulter(const vector<string> &nomTables,const vector<vector<string>> &tabNomChamps,vector<string> &valeurs,const string &concat=""){
             char *err_msg;
             if (sqlite3_exec(db_handle,WeakSQLCommandGenerator::SelectFromManyTables(nomTables,tabNomChamps,concat).c_str(),consulter_cb,(void*)&valeurs,&err_msg) != 0){
@@ -180,7 +194,8 @@ class BDR_SQLite3{
             vector<string> *vals = (vector<string>*)userdata;
 
             for (int i = 0 ; i < nb_columns ; i++){
-                vals->push_back(string(row[i]));
+                if (row[i] == NULL)     vals->push_back(string(""));                //And what if row[i] is NULL ?
+                else    vals->push_back(string(row[i]));
             }
 
             return 0;
