@@ -1,6 +1,7 @@
+
+#include "root.h"
 #include "adherent.h"
 
-BDR_SQLite3 Adherent::bd("dut_puc2442_proj.db");
 vector<string> Adherent::vChamps = {"nom","addresse","nbreLivresEmprunter"};
 string Adherent::nomTable = "adherent";
 
@@ -8,23 +9,23 @@ string Adherent::nomTable = "adherent";
 bool Adherent::ajouter(const string nom,const string addresse){
     vector<string> vValeurs = {"'"+nom+"'","'"+addresse+"'","'"+to_string(0)+"'"};
 
-    return bd.ajouter(nomTable,vChamps,vValeurs);
+    return Root::recupererBD().ajouter(nomTable,vChamps,vValeurs);
 }
 
 bool Adherent::modifierNom(unsigned int id,const string &nom){
-    return bd.modifier(nomTable,{id},{vChamps[0]},{"'"+nom+"'"},"","id");
+    return Root::recupererBD().modifier(nomTable,{id},{vChamps[0]},{"'"+nom+"'"},"","id");
 }
 
 bool Adherent::modifierNoms(const vector<unsigned int> &ids, const string &nom){
-    return bd.modifier(nomTable,ids,{vChamps[0]},{"'"+nom+"'"},"","id");
+    return Root::recupererBD().modifier(nomTable,ids,{vChamps[0]},{"'"+nom+"'"},"","id");
 }
 
 bool Adherent::modifierAddresse(unsigned int id,const string addresse){
-    return bd.modifier(nomTable,{id},{vChamps[1]},{"'"+addresse+"'"},"","id");
+    return Root::recupererBD().modifier(nomTable,{id},{vChamps[1]},{"'"+addresse+"'"},"","id");
 }
 
 bool Adherent::modifierAddresses(const vector<unsigned int> &ids,const string &addresse){
-    return bd.modifier(nomTable,ids,{vChamps[1]},{"'"+addresse+"'"},"","id");
+    return Root::recupererBD().modifier(nomTable,ids,{vChamps[1]},{"'"+addresse+"'"},"","id");
 }
 
 unsigned int Adherent::modifierNoms_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &noms){
@@ -58,17 +59,17 @@ unsigned int Adherent::modifieraddresses_WithDiffValues(const vector<unsigned in
 }
 
 bool Adherent::supprimer(unsigned int id){
-    return bd.supprimer(nomTable,{id},"id");
+    return Root::recupererBD().supprimer(nomTable,{id},"id");
 }
 
 bool Adherent::supprimer(const vector<unsigned int> &ids){
-    return bd.supprimer(nomTable,ids);
+    return Root::recupererBD().supprimer(nomTable,ids);
 }
 
 bool Adherent::consulter(vector<AdherentData> &adherents,const string &concat){
     vector<string> vValeurs;
 
-    if(!bd.consulter(nomTable,vChamps,vValeurs,concat)) return false;
+    if(!Root::recupererBD().consulter(nomTable,vChamps,vValeurs,concat)) return false;
 
     for(unsigned int i=0;i<vValeurs.size();i+=vChamps.size()){
         AdherentData data(vValeurs[i],vValeurs[i+1],strtoll(vValeurs[i+2].c_str(),NULL,10));
@@ -83,7 +84,7 @@ bool Adherent::consulter(vector<AdherentData> &adherents,const string &concat){
 bool Adherent::consulter(vector<AdherentData> &adherents,const vector<unsigned int> &ids,const string &condition,const string &concat){
     vector<string> vValeurs;
 
-    if(!bd.consulter(nomTable,ids,vChamps,vValeurs,condition,concat)) return false;
+    if(!Root::recupererBD().consulter(nomTable,ids,vChamps,vValeurs,condition,concat)) return false;
 
     for(unsigned int i=0;i<vValeurs.size();i+=vChamps.size()){
         AdherentData data(vValeurs[i],vValeurs[i+1],strtoll(vValeurs[i+2].c_str(),NULL,10));
@@ -187,6 +188,11 @@ AdherentData::AdherentData(unsigned int id,string nom,string addresse,unsigned i
 AdherentData(nom,addresse,nbreLivresEmprunter){
     this->id = id;
 }
+
+AdherentData::AdherentData(const AdherentData &ad){
+    *this = ad;
+}
+
 
 const string AdherentData::to_string(const string &separateur){
     string *res = new string();

@@ -31,7 +31,7 @@ class BDR_SQLite3{
         };
 
     public:
-        bool estOuvert(){
+        bool estOuvert() const{
             return is_open;
         };
 
@@ -39,7 +39,7 @@ class BDR_SQLite3{
             return db_handle;
         };
 
-        string& recupererNomFichierBD(){
+        string recupererNomFichierBD() const{
             return filename;
         };
 

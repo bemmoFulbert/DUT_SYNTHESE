@@ -1,29 +1,29 @@
+#include "root.h"
 #include "auteur.h"
 
-BDR_SQLite3 Auteur::bd("dut_puc2442_proj.db");
 vector<string> Auteur::vChamps = {"nom","prenom"};
 string Auteur::nomTable = "auteur";
 
 bool Auteur::ajouter(const string &nom,const string &prenom){
     vector<string> vValeurs = {"'"+nom+"'","'"+prenom+"'"};
 
-    return bd.ajouter(nomTable,vChamps,vValeurs);
+    return Root::recupererBD().ajouter(nomTable,vChamps,vValeurs);
 }
 
 bool Auteur::modifierNoms(const vector<unsigned int> &ids,const string &nom){
-    return bd.modifier(nomTable,ids,{vChamps[0]},{"'"+nom+"'"});
+    return Root::recupererBD().modifier(nomTable,ids,{vChamps[0]},{"'"+nom+"'"});
 }
 
 bool Auteur::modifierNom(unsigned int id,const string &nom){
-    return bd.modifier(nomTable,{id},{vChamps[0]},{"'"+nom+"'"},"","id");
+    return Root::recupererBD().modifier(nomTable,{id},{vChamps[0]},{"'"+nom+"'"},"","id");
 }
 
 bool Auteur::modifierPrenom(unsigned int id,const string &prenom){
-    return bd.modifier(nomTable,{id},{vChamps[1]},{"'"+prenom+"'"},"","id");
+    return Root::recupererBD().modifier(nomTable,{id},{vChamps[1]},{"'"+prenom+"'"},"","id");
 }
 
 bool Auteur::modifierPrenoms(const vector<unsigned int> &ids,const string &prenom){
-    return bd.modifier(nomTable,ids,{vChamps[1]},{"'"+prenom+"'"},"","id");
+    return Root::recupererBD().modifier(nomTable,ids,{vChamps[1]},{"'"+prenom+"'"},"","id");
 }
 
 unsigned int Auteur::modifierNoms_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &noms){
@@ -57,17 +57,17 @@ unsigned int Auteur::modifierPrenoms_WithDiffValues(const vector<unsigned int> &
 }
 
 bool Auteur::supprimer(unsigned int id){
-    return bd.supprimer(nomTable,{id},"id");
+    return Root::recupererBD().supprimer(nomTable,{id},"id");
 }
 
 bool Auteur::supprimer(const vector<unsigned int> &ids){
-    return bd.supprimer(nomTable,ids);
+    return Root::recupererBD().supprimer(nomTable,ids);
 }
 
 bool Auteur::consulter(vector<AuteurData> &auteurs,const string &concat){
     vector<string> vValeurs;
 
-    if(!bd.consulter(nomTable,vChamps,vValeurs,concat)) return false;
+    if(!Root::recupererBD().consulter(nomTable,vChamps,vValeurs,concat)) return false;
 
     for(unsigned int i=0;i<vValeurs.size();i+=vChamps.size()){
         AuteurData data(vValeurs[i],vValeurs[i+1]);
@@ -80,7 +80,7 @@ bool Auteur::consulter(vector<AuteurData> &auteurs,const string &concat){
 bool Auteur::consulter(vector<AuteurData> &auteurs,const vector<unsigned int> &ids){
     vector<string> vValeurs;
 
-    if(!bd.consulter(nomTable,ids,vChamps,vValeurs)) return false;
+    if(!Root::recupererBD().consulter(nomTable,ids,vChamps,vValeurs)) return false;
 
     for(unsigned int i=0;i<vValeurs.size();i+=vChamps.size()){
         AuteurData data(vValeurs[i],vValeurs[i+1]);
@@ -162,6 +162,10 @@ AuteurData::AuteurData(string nom,string prenom){
 AuteurData::AuteurData(unsigned int id,string nom,string prenom):
 AuteurData(nom,prenom){
     this->id = id;
+}
+
+AuteurData::AuteurData(const AuteurData &ad){
+    *this = ad;
 }
 
 void AuteurData::affiche_auteurData(vector<AuteurData> &v){

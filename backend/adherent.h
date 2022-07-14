@@ -7,12 +7,14 @@
 
 
 #include "BDR_SQLite3.h"
+#include "RefCounted.h"
+
 #include "util.h"
 
 using namespace std;
 
 //-----------------------declaration AdherentData --------------------------
-class AdherentData{
+class AdherentData : public RefCounted{
     public:
         AdherentData(string nom,
             string addresse,
@@ -20,6 +22,9 @@ class AdherentData{
         AdherentData(unsigned int id,string nom,
             string addresse,
             unsigned int nbreLivresEmprunter);
+
+        AdherentData(const AdherentData &ad);
+
         const string to_string(const string &separateur);
         static void affiche_adherentData(vector<AdherentData> &v);
 
@@ -62,7 +67,6 @@ class Adherent{
             static unsigned int importToVector(vector<AdherentData> &data,string nom_fichier,const string &separateur=" ");//importe dans un tableau dynamique, retourne le nombre d'elements ajoutes
             static unsigned int importToDB(string nom_fichier,const string &separateur=" "); // met dans la base de donnees
     private:
-        static BDR_SQLite3 bd;
         static vector<string> vChamps ;
         static string nomTable;
     };

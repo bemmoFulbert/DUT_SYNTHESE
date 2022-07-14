@@ -5,18 +5,21 @@
 #include <vector>
 #include <fstream>
 
-#include "BDR_SQLite3.h"
 #include "util.h"
+#include "BDR_SQLite3.h"
+#include "RefCounted.h"
 
 using namespace std;
 
 
 //-----------------------declaration AuteurData --------------------------
-class AuteurData
+class AuteurData : public RefCounted
 {
 public:
     AuteurData(string nom,string prenom);
     AuteurData(unsigned int id,string nom,string prenom);
+    AuteurData(const AuteurData &ad);
+
     static void affiche_auteurData(vector<AuteurData> &v);
     const string to_string(const string &separateur=" ");
 
@@ -53,7 +56,6 @@ class Auteur{
         static unsigned int importToVector(vector<AuteurData> &data,string nom_fichier,const string &separateur=" ");//importe dans un tableau dynamique, retourne le nombre d'elements ajoutes
         static unsigned int importToDB(string nom_fichier,const string &separateur=" "); // met dans la base de donnees
     private:
-        static BDR_SQLite3 bd;
         static vector<string> vChamps;
         static string nomTable;
 };

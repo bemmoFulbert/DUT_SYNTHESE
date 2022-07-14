@@ -2,15 +2,18 @@
 #define LIVRE_H
 
 #include <string>
+#include <hash_map>
 #include <fstream>
 
-#include "BDR_SQLite3.h"
 #include "util.h"
+#include "auteur.h"
 
 using namespace std;
+using namespace __gnu_cxx;      //For using c++ <hashmap>
+
 
 //-----------------------declaration LivreData ---------------------------------
-class LivreData{
+class LivreData : public RefCounted {
     public:
         LivreData(string titre,
             string dateDePublication,
@@ -23,8 +26,14 @@ class LivreData{
             unsigned int nbreExemplairesTotal,
             unsigned int nbreExemplairesEmprunter,
             unsigned int id_auteur);
+        LivreData(const LivreData &ld);
+
         static void affiche_livreData(vector<LivreData> &v);
         const string to_string(const string &separateur=" ");
+
+        ~LivreData();
+
+        void operator=(const LivreData &ld);
 
         unsigned int id = -1;
         string titre;
@@ -32,6 +41,8 @@ class LivreData{
         unsigned int nbreExemplairesTotal;
         unsigned int nbreExemplairesEmprunter;
         unsigned int id_auteur;
+
+        AuteurData *auteur = NULL;
 
 };
 
@@ -67,9 +78,10 @@ class Livre{
             static unsigned int importToVector(vector<LivreData> &data,string nom_fichier,const string &separateur=" ");//importe dans un tableau dynamique, retourne le nombre d'elements ajoutes
             static unsigned int importToDB(string nom_fichier,const string &separateur=" "); // met dans la base de donnees
         private:
-            static BDR_SQLite3 bd;
             static vector<string> vChamps;
             static string nomTable;
+
+            static bool getAuteurDataPtrs(hash_map<unsigned int,AuteurData*> &vals,const vector<unsigned int> *ids=NULL,const string &concat="");
     };
 
 #endif // LIVRE_H

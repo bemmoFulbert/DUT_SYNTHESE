@@ -30,3 +30,8 @@ bool Util::isComment(const string &ligne){
     else if(ligne.empty()){return true;}
     else return false;
 }
+
+
+long long Util::str_to_integer(const string &str){
+    return strtoll(str.c_str(),NULL,10);
+}
