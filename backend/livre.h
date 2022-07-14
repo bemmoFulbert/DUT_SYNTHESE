@@ -57,7 +57,8 @@ class Livre{
             static unsigned int modifierTitres_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &titres);
             static unsigned int modifierDateDePublications_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &dateDePublications);
 
-//          static bool ajouterNbreDeCopies(unsigned int id,unsigned int nbreAAjouter);
+            static bool ajouterNbreDeCopies(unsigned int id,unsigned int nbreAAjouter);
+            static bool enleverNbreDeCopies(unsigned int id,unsigned int nbreAEnlever);
             static bool consulterLivresEmprunterTrieParNom(vector<LivreData> &livres,bool isAsc=true);
             static bool consulterLivresEmprunterTrieParDate(vector<LivreData> &livres,bool isAsc=true); //par la date de l'emprunte
 

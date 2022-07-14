@@ -174,6 +174,16 @@ unsigned int Livre::importToDB(string nom_fichier,const string &separateur){
     return nbrAjout;
 }
 
+bool Livre::ajouterNbreDeCopies(unsigned int id,unsigned int nbreAAjouter){
+    string requete = "UPDATE Livre SET nbreExemplairesTotal = nbreExemplairesTotal+"+to_string(nbreAAjouter)+" WHERE id="+to_string(id)+";";
+    return bd.executerCommandeSQL(requete);
+}
+
+bool Livre::enleverNbreDeCopies(unsigned int id,unsigned int nbreAEnlever){
+    string requete = "UPDATE Livre SET nbreExemplairesTotal = nbreExemplairesTotal-"+to_string(nbreAEnlever)+" WHERE id="+to_string(id)+";";
+    return bd.executerCommandeSQL(requete);
+}
+
 //----------LivreData-----------------
 
 LivreData::LivreData(string titre,
