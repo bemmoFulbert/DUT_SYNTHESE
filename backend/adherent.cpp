@@ -71,12 +71,14 @@ bool Adherent::consulter(vector<AdherentData> &adherents,const string &concat){
     if(!bd.consulter(nomTable,vChamps,vValeurs,concat)) return false;
 
     for(unsigned int i=0;i<vValeurs.size();i+=vChamps.size()){
-        AdherentData data(vValeurs[i],vValeurs[i+1],stoi(vValeurs[i+2]));
+        AdherentData data(vValeurs[i],vValeurs[i+1],strtoll(vValeurs[i+2].c_str(),NULL,10));
         adherents.push_back(data);
     }
 
     return true;
 }
+
+#include <cstring>
 
 bool Adherent::consulter(vector<AdherentData> &adherents,const vector<unsigned int> &ids,const string &condition,const string &concat){
     vector<string> vValeurs;
@@ -84,7 +86,7 @@ bool Adherent::consulter(vector<AdherentData> &adherents,const vector<unsigned i
     if(!bd.consulter(nomTable,ids,vChamps,vValeurs,condition,concat)) return false;
 
     for(unsigned int i=0;i<vValeurs.size();i+=vChamps.size()){
-        AdherentData data(vValeurs[i],vValeurs[i+1],stoi(vValeurs[i+2]));
+        AdherentData data(vValeurs[i],vValeurs[i+1],strtoll(vValeurs[i+2].c_str(),NULL,10));
         adherents.push_back(data);
     }
 
@@ -147,7 +149,7 @@ unsigned int Adherent::importToVector(vector<AdherentData> &data,string nom_fich
             else{
                 dataTemp = Util::splitString(ligne,separateur);
 
-                AdherentData ad(dataTemp[0],dataTemp[1],stoi(dataTemp[2]));
+                AdherentData ad(dataTemp[0],dataTemp[1],strtoll(dataTemp[2].c_str(),NULL,10));
                 data.push_back(ad);
                 i++;
             }

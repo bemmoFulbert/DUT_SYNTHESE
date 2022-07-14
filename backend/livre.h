@@ -59,7 +59,7 @@ class Livre{
 
 //          static bool ajouterNbreDeCopies(unsigned int id,unsigned int nbreAAjouter);
             static bool consulterLivresEmprunterTrieParNom(vector<LivreData> &livres,bool isAsc=true);
-            static bool consulterLivresEmprunterTrieParDate(vector<LivreData> &livres,bool isAsc); //par la date de l'emprunte
+            static bool consulterLivresEmprunterTrieParDate(vector<LivreData> &livres,bool isAsc=true); //par la date de l'emprunte
 
             static bool exportToFile(vector<LivreData> &data,const string &nom_fichier,const string &separateur=" ");
             static bool exportToFile(const string &nom_fichier,const string &separateur=" ");

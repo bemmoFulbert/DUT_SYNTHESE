@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     //MainWindow w;
 
     vector<AdherentData> v;
-    Adherent::consulter(v,{1,3,4},"");
+    Adherent::consulter(v,{1,2,3},"");
     AdherentData::affiche_adherentData(v);
 
     //w.show();

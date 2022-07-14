@@ -75,7 +75,7 @@ bool Livre::consulter(vector<LivreData> &livres,const string &concat){
     if(!bd.consulter(nomTable,vChamps,vValeurs,concat)) return false;
 
     for(unsigned int i=0;i<vValeurs.size();i+=vChamps.size()){
-        LivreData data(vValeurs[i],vValeurs[i+1],stoi(vValeurs[i+2]),stoi(vValeurs[i+3]),stoi(vValeurs[i+4]));
+        LivreData data(vValeurs[i],vValeurs[i+1],strtoll(vValeurs[i+2].c_str(),NULL,10),strtoll(vValeurs[i+3].c_str(),NULL,10),strtoll(vValeurs[i+4].c_str(),NULL,10));
         livres.push_back(data);
     }
 
@@ -88,7 +88,7 @@ bool Livre::consulter(vector<LivreData> &livres,const vector<unsigned int> &ids,
     if(!bd.consulter(nomTable,ids,vChamps,vValeurs,condition,concat)) return false;
 
     for(unsigned int i=0;i<vValeurs.size();i+=vChamps.size()){
-        LivreData data(vValeurs[i],vValeurs[i+1],stoi(vValeurs[i+2]),stoi(vValeurs[i+3]),stoi(vValeurs[i+4]));
+        LivreData data(vValeurs[i],vValeurs[i+1],strtoll(vValeurs[i+2].c_str(),NULL,10),strtoll(vValeurs[i+3].c_str(),NULL,10),strtoll(vValeurs[i+4].c_str(),NULL,10));
         livres.push_back(data);
     }
     return true;
@@ -150,7 +150,7 @@ unsigned int Livre::importToVector(vector<LivreData> &data,string nom_fichier,co
             else{
                 dataTemp = Util::splitString(ligne,separateur);
 
-                LivreData ad(dataTemp[0],dataTemp[1],stoi(dataTemp[2]),stoi(dataTemp[3]),stoi(dataTemp[4]));
+                LivreData ad(dataTemp[0],dataTemp[1],strtoll(dataTemp[2].c_str(),NULL,10),strtoll(dataTemp[3].c_str(),NULL,10),strtoll(dataTemp[4].c_str(),NULL,10));
                 data.push_back(ad);
                 i++;
             }
