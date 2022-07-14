@@ -43,6 +43,18 @@ class BDR_SQLite3{
             return filename;
         };
 
+        bool executerCommandeSQL(const string &commande_sql,int (*callback)(void *userdata,int nb_columns,char **row,char **header_row) = NULL,void *userdata = NULL){
+            char *err_msg;
+
+            if (sqlite3_exec(this->db_handle,commande_sql.c_str(),callback,userdata,&err_msg)){
+                cerr << "*Fatale* BDR_SQLite::executerCommandeSQL : " << err_msg << endl;
+                sqlite3_free(err_msg);
+                return false;
+            }
+
+            return true;
+        };
+
 
     public:
         /*
