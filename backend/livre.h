@@ -9,6 +9,7 @@
 
 using namespace std;
 
+//-----------------------declaration LivreData ---------------------------------
 class LivreData{
     public:
         LivreData(string titre,
@@ -22,7 +23,7 @@ class LivreData{
             unsigned int nbreExemplairesTotal,
             unsigned int nbreExemplairesEmprunter,
             unsigned int id_auteur);
-        static void affiche_livreData(vector<LivreData> v);
+        static void affiche_livreData(vector<LivreData> &v);
         const string to_string(const string &separateur=" ");
 
         unsigned int id = -1;
@@ -34,6 +35,8 @@ class LivreData{
 
 };
 
+
+//-----------------------declaration Livre ------------------------------
 class Livre{
         public:
             static bool ajouter(const string titre,const string dateDePublication,unsigned int id_auteur);
@@ -42,10 +45,17 @@ class Livre{
             static bool supprimer(unsigned int id);
             static bool consulter(vector<LivreData> &livres,const string &concat="");
 
-            static bool modifierTitre(const vector<unsigned int> &ids, const string &titre);
-            static bool modifierDateDePublication(const vector<unsigned int> &ids,const string &DateDePublication);
+            static bool modifierTitres(const vector<unsigned int> &ids, const string &titre);
+            static bool modifierDateDePublications(const vector<unsigned int> &ids,const string &DateDePublication);
             static bool supprimer(const vector<unsigned int> &ids);
             static bool consulter(vector<LivreData> &livres,const vector<unsigned int> &ids,const string &condition="",const string &concat="");
+
+            /* valeur[0] change ids[0] et ainsi de suite.
+             *  en temps normal on retourne le nombre de champs modifies
+             *  on ne fait rien si les deux(02) vecteurs n'ont pas la meme taille et on retourne -1
+             */
+            static unsigned int modifierTitres_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &titres);
+            static unsigned int modifierDateDePublications_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &dateDePublications);
 
 //          static bool ajouterNbreDeCopies(unsigned int id,unsigned int nbreAAjouter);
             static bool consulterLivresEmprunterTrieParNom(vector<LivreData> &livres,bool isAsc=true);

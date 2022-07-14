@@ -10,7 +10,7 @@ bool Auteur::ajouter(const string &nom,const string &prenom){
     return bd.ajouter(nomTable,vChamps,vValeurs);
 }
 
-bool Auteur::modifierNom(const vector<unsigned int> &ids,const string &nom){
+bool Auteur::modifierNoms(const vector<unsigned int> &ids,const string &nom){
     return bd.modifier(nomTable,ids,{vChamps[0]},{"'"+nom+"'"});
 }
 
@@ -22,8 +22,38 @@ bool Auteur::modifierPrenom(unsigned int id,const string &prenom){
     return bd.modifier(nomTable,{id},{vChamps[1]},{"'"+prenom+"'"},"","id");
 }
 
-bool Auteur::modifierPrenom(const vector<unsigned int> &ids,const string &prenom){
+bool Auteur::modifierPrenoms(const vector<unsigned int> &ids,const string &prenom){
     return bd.modifier(nomTable,ids,{vChamps[1]},{"'"+prenom+"'"},"","id");
+}
+
+unsigned int Auteur::modifierNoms_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &noms){
+    unsigned int idsLen = ids.size();
+    unsigned int nomsLen = noms.size();
+    unsigned int nbrChampsModifie = 0;
+
+    if(idsLen == nomsLen){
+        for(unsigned int i=0; i<idsLen ; i++){
+            if(modifierNom(ids[i],noms[i])){
+                nbrChampsModifie++;
+            }
+        }
+        return nbrChampsModifie;
+    }else return -1;
+}
+
+unsigned int Auteur::modifierPrenoms_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &prenoms){
+    unsigned int idsLen = ids.size();
+    unsigned int prenomsLen = prenoms.size();
+    unsigned int nbrChampsModifie = 0;
+
+    if(idsLen == prenomsLen){
+        for(unsigned int i=0; i<idsLen ; i++){
+            if(modifierPrenom(ids[i],prenoms[i])){
+                nbrChampsModifie++;
+            }
+        }
+        return nbrChampsModifie;
+    }else return -1;
 }
 
 bool Auteur::supprimer(unsigned int id){
@@ -134,7 +164,7 @@ AuteurData(nom,prenom){
     this->id = id;
 }
 
-void AuteurData::affiche_auteurData(vector<AuteurData> v){
+void AuteurData::affiche_auteurData(vector<AuteurData> &v){
     for(unsigned int i = 0;i<v.size();i++){
         cout << v[i].nom << " - " << v[i].prenom << endl;
     }

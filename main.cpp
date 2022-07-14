@@ -13,8 +13,9 @@ int main(int argc, char *argv[])
     //QApplication a(argc, argv);
     //MainWindow w;
 
-    //vector<AuteurData> v;
-    Livre::modifierDateDePublication({2,3,4},"1999-02-02");
+    vector<AdherentData> v;
+    Adherent::consulter(v,{1,3,4},"");
+    AdherentData::affiche_adherentData(v);
 
     //w.show();
     //return a.exec();

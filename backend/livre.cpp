@@ -19,7 +19,7 @@ bool Livre::modifierTitre(unsigned int id,const string &titre){
     return bd.modifier(nomTable,{id},{vChamps[0]},{"'"+titre+"'"},"","id");
 }
 
-bool Livre::modifierTitre(const vector<unsigned int> &ids,const string &titre){
+bool Livre::modifierTitres(const vector<unsigned int> &ids,const string &titre){
     return bd.modifier(nomTable,ids,{vChamps[0]},{"'"+titre+"'"},"","id");
 }
 
@@ -27,8 +27,38 @@ bool Livre::modifierDateDePublication(unsigned int id,const string &dateDePublic
     return bd.modifier(nomTable,{id},{vChamps[1]},{"'"+dateDePublication+"'"},"","id");
 }
 
-bool Livre::modifierDateDePublication(const vector<unsigned int> &ids,const string &dateDePublication){
+bool Livre::modifierDateDePublications(const vector<unsigned int> &ids,const string &dateDePublication){
     return bd.modifier(nomTable,ids,{vChamps[1]},{"'"+dateDePublication+"'"},"","id");
+}
+
+unsigned int Livre::modifierTitres_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &titres){
+    unsigned int idsLen = ids.size();
+    unsigned int titresLen = titres.size();
+    unsigned int nbrChampsModifie = 0;
+
+    if(idsLen == titresLen){
+        for(unsigned int i=0; i<idsLen ; i++){
+            if(modifierTitre(ids[i],titres[i])){
+                nbrChampsModifie++;
+            }
+        }
+        return nbrChampsModifie;
+    }else return -1;
+}
+
+unsigned int Livre::modifierDateDePublications_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &dateDePublications){
+    unsigned int idsLen = ids.size();
+    unsigned int dateDePublicationsLen = dateDePublications.size();
+    unsigned int nbrChampsModifie = 0;
+
+    if(idsLen == dateDePublicationsLen){
+        for(unsigned int i=0; i<idsLen ; i++){
+            if(modifierDateDePublication(ids[i],dateDePublications[i])){
+                nbrChampsModifie++;
+            }
+        }
+        return nbrChampsModifie;
+    }else return -1;
 }
 
 bool Livre::supprimer(unsigned int id){
@@ -167,7 +197,7 @@ LivreData::LivreData(unsigned int id,
 LivreData(titre,dateDePublication,nbreExemplairesTotal,nbreExemplairesEmprunter,id_auteur){
     this->id = id;
 }
-void LivreData::affiche_livreData(vector<LivreData> v){
+void LivreData::affiche_livreData(vector<LivreData> &v){
     for(unsigned int i = 0;i<v.size();i++){
         cout << v[i].titre << " - " << v[i].dateDePublication << " - " << v[i].nbreExemplairesTotal << " - "<< v[i].nbreExemplairesEmprunter << " - "<< v[i].id_auteur << endl;
     }

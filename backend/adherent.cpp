@@ -15,7 +15,7 @@ bool Adherent::modifierNom(unsigned int id,const string &nom){
     return bd.modifier(nomTable,{id},{vChamps[0]},{"'"+nom+"'"},"","id");
 }
 
-bool Adherent::modifierNom(const vector<unsigned int> &ids, const string &nom){
+bool Adherent::modifierNoms(const vector<unsigned int> &ids, const string &nom){
     return bd.modifier(nomTable,ids,{vChamps[0]},{"'"+nom+"'"},"","id");
 }
 
@@ -23,8 +23,38 @@ bool Adherent::modifierAddresse(unsigned int id,const string addresse){
     return bd.modifier(nomTable,{id},{vChamps[1]},{"'"+addresse+"'"},"","id");
 }
 
-bool Adherent::modifierAddresse(const vector<unsigned int> &ids,const string &addresse){
+bool Adherent::modifierAddresses(const vector<unsigned int> &ids,const string &addresse){
     return bd.modifier(nomTable,ids,{vChamps[1]},{"'"+addresse+"'"},"","id");
+}
+
+unsigned int Adherent::modifierNoms_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &noms){
+    unsigned int idsLen = ids.size();
+    unsigned int nomsLen = noms.size();
+    unsigned int nbrChampsModifie = 0;
+
+    if(idsLen == nomsLen){
+        for(unsigned int i=0; i<idsLen ; i++){
+            if(modifierNom(ids[i],noms[i])){
+                nbrChampsModifie++;
+            }
+        }
+        return nbrChampsModifie;
+    }else return -1;
+}
+
+unsigned int Adherent::modifieraddresses_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &addresses){
+    unsigned int idsLen = ids.size();
+    unsigned int addressesLen = addresses.size();
+    unsigned int nbrChampsModifie = 0;
+
+    if(idsLen == addressesLen){
+        for(unsigned int i=0; i<idsLen ; i++){
+            if(modifierAddresse(ids[i],addresses[i])){
+                nbrChampsModifie++;
+            }
+        }
+        return nbrChampsModifie;
+    }else return -1;
 }
 
 bool Adherent::supprimer(unsigned int id){
@@ -162,4 +192,10 @@ const string AdherentData::to_string(const string &separateur){
     res->append(addresse); res->append(separateur);
     res->append(std::to_string(nbreLivresEmprunter));
     return *res;
+}
+
+void AdherentData::affiche_adherentData(vector<AdherentData> &v){
+    for(unsigned int i = 0;i<v.size();i++){
+        cout << v[i].to_string("-") << endl;
+    }
 }

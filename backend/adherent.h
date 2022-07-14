@@ -11,6 +11,7 @@
 
 using namespace std;
 
+//-----------------------declaration AdherentData --------------------------
 class AdherentData{
     public:
         AdherentData(string nom,
@@ -20,6 +21,7 @@ class AdherentData{
             string addresse,
             unsigned int nbreLivresEmprunter);
         const string to_string(const string &separateur);
+        static void affiche_adherentData(vector<AdherentData> &v);
 
         unsigned int id = -1;
         string nom;
@@ -27,6 +29,8 @@ class AdherentData{
         unsigned int nbreLivresEmprunter;
 };
 
+
+//-----------------------declaration AdherentData --------------------------
 class Adherent{
         public:
             static bool ajouter(const string nom,const string addresse);
@@ -35,10 +39,17 @@ class Adherent{
             static bool supprimer(unsigned int id);
             static bool consulter(vector<AdherentData> &adherents,const string &concat="");
 
-            static bool modifierNom(const vector<unsigned int> &ids, const string &nom);
-            static bool modifierAddresse(const vector<unsigned int> &ids,const string &addresse);
+            static bool modifierNoms(const vector<unsigned int> &ids, const string &nom);
+            static bool modifierAddresses(const vector<unsigned int> &ids,const string &addresse);
             static bool supprimer(const vector<unsigned int> &ids);
             static bool consulter(vector<AdherentData> &adherents,const vector<unsigned int> &ids,const string &condition="",const string &concat="");
+
+            /* valeur[0] change ids[0] et ainsi de suite.
+             *  en temps normal on retourne le nombre de champs modifies
+             *  on ne fait rien si les deux(02) vecteurs n'ont pas la meme taille et on retourne -1
+             */
+            static unsigned int modifierNoms_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &noms);
+            static unsigned int modifieraddresses_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &addresses);
 
 //            static bool emprunterLivre(unsigned int id_livre);
 //            static bool rendreLivre(unsigned int id_livre);

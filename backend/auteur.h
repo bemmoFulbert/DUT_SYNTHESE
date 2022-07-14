@@ -10,12 +10,14 @@
 
 using namespace std;
 
+
+//-----------------------declaration AuteurData --------------------------
 class AuteurData
 {
 public:
     AuteurData(string nom,string prenom);
     AuteurData(unsigned int id,string nom,string prenom);
-    static void affiche_auteurData(vector<AuteurData> v);
+    static void affiche_auteurData(vector<AuteurData> &v);
     const string to_string(const string &separateur=" ");
 
     unsigned int id = -1;
@@ -23,6 +25,8 @@ public:
     string prenom;
 };
 
+
+//-----------------------declaration Auteur ----------------------------------
 class Auteur{
     public:
 
@@ -32,10 +36,17 @@ class Auteur{
         static bool supprimer(unsigned int id);
         static bool consulter(vector<AuteurData> &auteurs,const string &concat="");
 
-        static bool modifierNom(const vector<unsigned int> &ids,const string &nom);
-        static bool modifierPrenom(const vector<unsigned int> &ids,const string &prenom);
+        static bool modifierNoms(const vector<unsigned int> &ids,const string &nom);
+        static bool modifierPrenoms(const vector<unsigned int> &ids,const string &prenom);
         static bool supprimer(const vector<unsigned int> &ids);
         static bool consulter(vector<AuteurData> &auteurs,const vector<unsigned int> &ids);
+
+        /* valeur[0] change ids[0] et ainsi de suite.
+         *  en temps normal on retourne le nombre de champs modifies
+         *  on ne fait rien si les deux(02) vecteurs n'ont pas la meme taille et on retourne -1
+         */
+        static unsigned int modifierNoms_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &noms);
+        static unsigned int modifierPrenoms_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &prenoms);
 
         static bool exportToFile(vector<AuteurData> &data,const string &nom_fichier,const string &separateur=" ");
         static bool exportToFile(const string &nom_fichier,const string &separateur=" ");
