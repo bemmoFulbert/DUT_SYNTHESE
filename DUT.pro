@@ -13,6 +13,7 @@ SOURCES += \
     backend/adherent.cpp \
     backend/auteur.cpp \
     backend/livre.cpp \
+    backend/root.cpp \
     backend/util.cpp \
     main.cpp \
     mainwindow.cpp
@@ -20,10 +21,13 @@ SOURCES += \
 HEADERS += \
     backend/BDR_SQLite3.h \
     backend/Emprunte.h \
+    backend/RefCounted.h \
+    backend/UniqueSet.h \
     backend/WeakSQLCommandGenerator.h \
     backend/adherent.h \
     backend/auteur.h \
     backend/livre.h \
+    backend/root.h \
     backend/util.h \
     mainwindow.h
 

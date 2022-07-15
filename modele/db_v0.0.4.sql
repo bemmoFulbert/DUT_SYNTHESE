@@ -41,9 +41,9 @@ create table Livre(
 	id integer primary key,
 	titre varchar(100) not null,
 	dateDePub datetime not null,
-	nbreExemplairesTotal int unsigned not null default '0',
-	nbreExemplairesEmprunter int unsigned not null default '0',
-	id_auteur int unsigned not null,
+	nbreExemplairesTotal int not null default '0',
+	nbreExemplairesEmprunter int not null default '0',
+	id_auteur int not null,
 	check (nbreExemplairesTotal >=0 and nbreExemplairesEmprunter >=0),
 	constraint fk_idAuteur_livre foreign key (id_auteur) references Auteur(id) ON DELETE CASCADE
 );

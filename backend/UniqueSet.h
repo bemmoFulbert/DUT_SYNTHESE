@@ -1,7 +1,10 @@
 #ifndef UNIQUESET_H_INCLUDED
 #define UNIQUESET_H_INCLUDED
 
+#include <vector>
+#include <iostream>
 
+using namespace std;
 //A set of elements that are unique i.e. a set with no duplicates.
 //e.g [1,1,2] is not a unique set since element 1 is duplicated
 

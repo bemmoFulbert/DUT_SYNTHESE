@@ -20,6 +20,9 @@ using namespace std;
             _ids_ = __ids.getInternalVector();     \
             \
         }       \
+        else{   \
+            _ids_ = *(vector<unsigned int>*)(in_vector_of_ids_ptr);    \
+        }   \
         hash_map<unsigned int,child_data_type*> h1;    \
         if (get_xxx_data_ptrs_func_name(h1,_ids_) == false)    return ret_val_if_fail;    \
         for (unsigned int i = 0 ; i < out_vector_of_xxx_data.size() ; i++){    \
@@ -42,6 +45,7 @@ class Root{
                 cerr << "*Avertissement* backend::Root::chargerBD : la nouvelle BD n'est pas ouvert !!!" << endl;
             }
             else{
+                nouvelBD.executerCommandeSQL("PRAGMA foreign_keys=on;");
                 cout << "*Info* backend::Root::chargerBD : la nouvelle BD a bien eté charger dans l'objet Root" << endl;
             }
             db = &nouvelBD;

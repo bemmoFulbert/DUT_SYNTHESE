@@ -2,6 +2,9 @@
 
 #include <QApplication>
 
+#include "backend/BDR_SQLite3.h"
+#include "backend/root.h"
+
 #include "backend/auteur.h"
 #include "backend/livre.h"
 #include "backend/adherent.h"
@@ -13,10 +16,16 @@ int main(int argc, char *argv[])
     //QApplication a(argc, argv);
     //MainWindow w;
 
-    vector<AdherentData> v;
-    //Adherent::consulter(v,{1,2,3},"");
-    Livre::ajouterNbreDeCopies(3,38);
-    AdherentData::affiche_adherentData(v);
+    BDR_SQLite3 bd("dut_puc2442_proj.db");
+    Root::chargerBD(bd);
+
+    vector<LivreData> v;
+    Livre::consulter(v,{5},"");
+    //Livre::ajouterNbreDeCopies(3,38);
+
+    LivreData::affiche_livreData(v);
+
+    //AdherentData::affiche_adherentData(v);
 
     //w.show();
     //return a.exec();

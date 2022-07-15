@@ -147,6 +147,8 @@ class BDR_SQLite3{
         //Consulte uniquement les champs specifier dans le vecteur nomChamps
 
         bool consulter(const string &nomTable,const vector<string> &nomChamps,vector<string> &valeurs,const string &concat=""){
+            cout << WeakSQLCommandGenerator::SelectFromOneTable(nomTable,nomChamps,concat) << endl;
+
             char *err_msg;
             if (sqlite3_exec(db_handle,WeakSQLCommandGenerator::SelectFromOneTable(nomTable,nomChamps,concat).c_str(),consulter_cb,(void*)&valeurs,&err_msg) != 0){
                 cerr << "*Fatale* BDR_SQLite::consulter : " << err_msg << endl;
