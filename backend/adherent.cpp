@@ -65,90 +65,90 @@ bool Adherent::modifierSexes(const vector<unsigned int> &ids,const string &sexe)
 bool Adherent::modifierNoms_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &noms){
     unsigned int idsLen = ids.size();
     unsigned int nomsLen = noms.size();
-    bool err = false;
+    bool err = true;
 
     if(idsLen == nomsLen){
         for(unsigned int i=0; i<idsLen ; i++){
-            if(modifierNom(ids[i],noms[i])){
-                err = true;
+            if(!modifierNom(ids[i],noms[i])){
+                err = false;
             }
         }
-    }
+    }else err = false;
     return err;
 }
 
 bool Adherent::modifierPrenoms_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &prenoms){
     unsigned int idsLen = ids.size();
     unsigned int prenomsLen = prenoms.size();
-    bool err = false;
+    bool err = true;
 
     if(idsLen == prenomsLen){
         for(unsigned int i=0; i<idsLen ; i++){
-            if(modifierPrenom(ids[i],prenoms[i])){
-                err = true;
+            if(!modifierPrenom(ids[i],prenoms[i])){
+                err = false;
             }
         }
-    }
+    }else err = false;
     return err;
 }
 
 bool Adherent::modifierAddresses_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &addresses){
     unsigned int idsLen = ids.size();
     unsigned int addressesLen = addresses.size();
-    bool err = false;
+    bool err = true;
 
     if(idsLen == addressesLen){
         for(unsigned int i=0; i<idsLen ; i++){
-            if(modifierAddresse(ids[i],addresses[i])){
-                err=true;
+            if(!modifierAddresse(ids[i],addresses[i])){
+                err=false;
             }
         }
-    }
+    }else err = false;
     return err;
 }
 
 bool Adherent::modifierEmails_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &emails){
     unsigned int idsLen = ids.size();
     unsigned int emailsLen = emails.size();
-    bool err = false;
+    bool err = true;
 
     if(idsLen == emailsLen){
         for(unsigned int i=0; i<idsLen ; i++){
-            if(modifierEmail(ids[i],emails[i])){
-                err=true;
+            if(!modifierEmail(ids[i],emails[i])){
+                err=false;
             }
         }
-    }
+    }else err = false;
     return err;
 }
 
 bool Adherent::modifierDateDeNaissances_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &dateDeNaissances){
     unsigned int idsLen = ids.size();
     unsigned int dateDeNaissancesLen = dateDeNaissances.size();
-    bool err = false;
+    bool err = true;
 
     if(idsLen == dateDeNaissancesLen){
         for(unsigned int i=0; i<idsLen ; i++){
-            if(modifierDateDeNaissance(ids[i],dateDeNaissances[i])){
-                err=true;
+            if(!modifierDateDeNaissance(ids[i],dateDeNaissances[i])){
+                err=false;
             }
         }
-    }
+    }else err = false;
     return err;
 }
 
 bool Adherent::modifierSexes_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &sexes){
     unsigned int idsLen = ids.size();
     unsigned int sexesLen = sexes.size();
-    bool err = false;
+    bool err = true;
 
     if(idsLen == sexesLen){
         for(unsigned int i=0; i<idsLen ; i++){
-            if(modifierSexe(ids[i],sexes[i])){
-                err=true;
+            if(!modifierSexe(ids[i],sexes[i])){
+                err=false;
             }
         }
-    }
+    }else err = false;
     return err;
 }
 
@@ -268,6 +268,35 @@ unsigned int Adherent::importToDB(string nom_fichier,const string &separateur){
         ajouter(data[i].nom,data[i].addresse);
     }
     return nbrAjout;
+}
+
+bool Adherent::emprunterLivre(unsigned int id_livre,unsigned int id_adherent){
+    vector<string> vChampsEmprunte = {"id_livre","id_adherent","date"};
+    vector<string> vValeurs = {to_string(id_livre),to_string(id_adherent),"CURRENT_TIMESTAMP"};
+
+    if(Root::recupererBD().ajouter("Emprunte",vChampsEmprunte,vValeurs)){
+        Root::recupererBD().executerCommandeSQL("UPDATE Adherent SET nbreLivresEmprunter = nbreLivresEmprunter+1 WHERE id="+to_string(id_adherent)+";");
+        Root::recupererBD().executerCommandeSQL("UPDATE Livre SET nbreExemplairesEmprunter = nbreExemplairesEmprunter-1 WHERE id="+to_string(id_livre)+";");
+        return true;
+    }
+    return false;
+}
+
+bool Adherent::rendreLivre(unsigned int id_livre,unsigned int id_adherent){
+    vector<string> vValeursVerif;
+    Root::recupererBD().consulter("Emprunte",{"date"},vValeursVerif,"WHERE id_livre="+to_string(id_livre)+" AND id_adherent="+to_string(id_adherent)+" AND date NOT IN (SELECT date_Emprunte FROM Retourne)");
+    if(vValeursVerif[0].empty() || vValeursVerif[0] == "0") return false;
+
+    string dateEmprunt = vValeursVerif[0];
+    vector<string> vChampsRetourne = {"date_Emprunte","date"};
+    vector<string> vValeurs = {dateEmprunt,"CURRENT_TIMESTAMP"};
+
+    if(Root::recupererBD().ajouter("Retourne",vChampsRetourne,vValeurs)){
+        Root::recupererBD().executerCommandeSQL("UPDATE Adherent SET nbreLivresEmprunter = nbreLivresEmprunter-1 WHERE id="+to_string(id_adherent)+";");
+        Root::recupererBD().executerCommandeSQL("UPDATE Livre SET nbreExemplairesEmprunter = nbreExemplairesEmprunter+1 WHERE id="+to_string(id_livre)+";");
+        return true;
+    }
+    return false;
 }
 
 //----------------AdherentData--------------

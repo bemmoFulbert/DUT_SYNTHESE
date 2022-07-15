@@ -35,30 +35,30 @@ bool Livre::modifierDateDePublications(const vector<unsigned int> &ids,const str
 bool Livre::modifierTitres_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &titres){
     unsigned int idsLen = ids.size();
     unsigned int titresLen = titres.size();
-    bool err = false;
+    bool err = true;
 
     if(idsLen == titresLen){
         for(unsigned int i=0; i<idsLen ; i++){
-            if(modifierTitre(ids[i],titres[i])){
-                err = true;
+            if(!modifierTitre(ids[i],titres[i])){
+                err = false;
             }
         }
-    }
+    }else err = false;
     return err;
 }
 
 bool Livre::modifierDateDePublications_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &dateDePublications){
     unsigned int idsLen = ids.size();
     unsigned int dateDePublicationsLen = dateDePublications.size();
-    bool err = false;
+    bool err = true;
 
     if(idsLen == dateDePublicationsLen){
         for(unsigned int i=0; i<idsLen ; i++){
-            if(modifierDateDePublication(ids[i],dateDePublications[i])){
-                err = true;
+            if(!modifierDateDePublication(ids[i],dateDePublications[i])){
+                err = false;
             }
         }
-    }
+    }else err = false;
     return err;
 }
 

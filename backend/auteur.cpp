@@ -30,30 +30,30 @@ bool Auteur::modifierPrenoms(const vector<unsigned int> &ids,const string &preno
 bool Auteur::modifierNoms_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &noms){
     unsigned int idsLen = ids.size();
     unsigned int nomsLen = noms.size();
-    bool err = false;
+    bool err = true;
 
     if(idsLen == nomsLen){
         for(unsigned int i=0; i<idsLen ; i++){
-            if(modifierNom(ids[i],noms[i])){
-                err = true;
+            if(!modifierNom(ids[i],noms[i])){
+                err = false;
             }
         }
-    }
+    }else err = false;
     return err;
 }
 
 bool Auteur::modifierPrenoms_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &prenoms){
     unsigned int idsLen = ids.size();
     unsigned int prenomsLen = prenoms.size();
-    bool err = false;
+    bool err = true;
 
     if(idsLen == prenomsLen){
         for(unsigned int i=0; i<idsLen ; i++){
-            if(modifierPrenom(ids[i],prenoms[i])){
-                err = true;
+            if(!modifierPrenom(ids[i],prenoms[i])){
+                err = false;
             }
         }
-    }
+    }else err = false;
     return err;
 }
 

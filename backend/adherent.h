@@ -76,8 +76,8 @@ class Adherent{
             static bool modifierDateDeNaissances_WithDiffValues(const vector<unsigned int> &ids, const vector<string> &dateDeNaissances);
             static bool modifierSexes_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &sexes);
 
-//            static bool emprunterLivre(unsigned int id_livre);
-//            static bool rendreLivre(unsigned int id_livre);
+            static bool emprunterLivre(unsigned int id_livre,unsigned int id_adherent);
+            static bool rendreLivre(unsigned int id_livre,unsigned int id_adherent);
 
             static bool consulterEmprunteurTrieParNom(vector<AdherentData> &adherents,bool isAsc=true);
             static bool consulterEmprunteurTrieParDate(vector<AdherentData> &adherents,bool isAsc=true);
