@@ -1,6 +1,7 @@
 #include "root.h"
 #include "auteur.h"
 
+vector<string> Auteur::vChamps_full = {"id","nom","prenom"};
 vector<string> Auteur::vChamps = {"nom","prenom"};
 string Auteur::nomTable = "auteur";
 
@@ -26,34 +27,34 @@ bool Auteur::modifierPrenoms(const vector<unsigned int> &ids,const string &preno
     return Root::recupererBD().modifier(nomTable,ids,{vChamps[1]},{"\""+prenom+"\""},"","id");
 }
 
-unsigned int Auteur::modifierNoms_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &noms){
+bool Auteur::modifierNoms_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &noms){
     unsigned int idsLen = ids.size();
     unsigned int nomsLen = noms.size();
-    unsigned int nbrChampsModifie = 0;
+    bool err = false;
 
     if(idsLen == nomsLen){
         for(unsigned int i=0; i<idsLen ; i++){
             if(modifierNom(ids[i],noms[i])){
-                nbrChampsModifie++;
+                err = true;
             }
         }
-        return nbrChampsModifie;
-    }else return -1;
+    }
+    return err;
 }
 
-unsigned int Auteur::modifierPrenoms_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &prenoms){
+bool Auteur::modifierPrenoms_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &prenoms){
     unsigned int idsLen = ids.size();
     unsigned int prenomsLen = prenoms.size();
-    unsigned int nbrChampsModifie = 0;
+    bool err = false;
 
     if(idsLen == prenomsLen){
         for(unsigned int i=0; i<idsLen ; i++){
             if(modifierPrenom(ids[i],prenoms[i])){
-                nbrChampsModifie++;
+                err = true;
             }
         }
-        return nbrChampsModifie;
-    }else return -1;
+    }
+    return err;
 }
 
 bool Auteur::supprimer(unsigned int id){
@@ -67,10 +68,10 @@ bool Auteur::supprimer(const vector<unsigned int> &ids){
 bool Auteur::consulter(vector<AuteurData> &auteurs,const string &concat){
     vector<string> vValeurs;
 
-    if(!Root::recupererBD().consulter(nomTable,vChamps,vValeurs,concat)) return false;
+    if(!Root::recupererBD().consulter(nomTable,vChamps_full,vValeurs,concat)) return false;
 
-    for(unsigned int i=0;i<vValeurs.size();i+=vChamps.size()){
-        AuteurData data(vValeurs[i],vValeurs[i+1]);
+    for(unsigned int i=0;i<vValeurs.size();i+=vChamps_full.size()){
+        AuteurData data(Util::str_to_integer(vValeurs[i]),vValeurs[i+1],vValeurs[i+2]);
         auteurs.push_back(data);
     }
 
@@ -80,10 +81,10 @@ bool Auteur::consulter(vector<AuteurData> &auteurs,const string &concat){
 bool Auteur::consulter(vector<AuteurData> &auteurs,const vector<unsigned int> &ids){
     vector<string> vValeurs;
 
-    if(!Root::recupererBD().consulter(nomTable,ids,vChamps,vValeurs)) return false;
+    if(!Root::recupererBD().consulter(nomTable,ids,vChamps_full,vValeurs)) return false;
 
-    for(unsigned int i=0;i<vValeurs.size();i+=vChamps.size()){
-        AuteurData data(vValeurs[i],vValeurs[i+1]);
+    for(unsigned int i=0;i<vValeurs.size();i+=vChamps_full.size()){
+        AuteurData data(Util::str_to_integer(vValeurs[i]),vValeurs[i+1],vValeurs[i+2]);
         auteurs.push_back(data);
     }
     return true;
@@ -93,7 +94,7 @@ bool Auteur::exportToFile(vector<AuteurData> &data, const string &nom_fichier, c
     ofstream flux(nom_fichier.c_str());
     if(flux){
         flux << "// fichier d\"exportation d\"auteurs" <<endl;
-        flux << "// " << Util::vectorToString(vChamps,separateur)  << endl <<endl;
+        flux << "// " << Util::vectorToString(vChamps_full,separateur)  << endl <<endl;
 
         for(unsigned int i=0;i<data.size();i++){
             flux << data[i].to_string(separateur) <<endl;

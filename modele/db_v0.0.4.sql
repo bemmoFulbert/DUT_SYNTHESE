@@ -10,6 +10,7 @@
 
 #v0.0.3
 #added column foreign key date_Emprunte in table Retourne
+#added columns on Adherent
 
 #-----------news---------------------------news---------------------------news----------------
 #v0.0.2

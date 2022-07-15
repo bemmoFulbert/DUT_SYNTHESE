@@ -2,7 +2,9 @@
 #include "root.h"
 #include "adherent.h"
 
-vector<string> Adherent::vChamps = {"nom","addresse","nbreLivresEmprunter"};
+vector<string> Adherent::vChamps = {"nom","addresse","nbreLivresEmprunter","prenom","email","dateDeNaissance","sexe"};
+////////////-------------------------0-------1--------------2-----------------3--------4--------------5==========6==============
+vector<string> Adherent::vChamps_full = {"id","nom","addresse","nbreLivresEmprunter","prenom","email","dateDeNaissance","sexe"};
 string Adherent::nomTable = "adherent";
 
 
@@ -20,6 +22,14 @@ bool Adherent::modifierNoms(const vector<unsigned int> &ids, const string &nom){
     return Root::recupererBD().modifier(nomTable,ids,{vChamps[0]},{"\""+nom+"\""},"","id");
 }
 
+bool Adherent::modifierPrenom(unsigned int id,const string prenom){
+    return Root::recupererBD().modifier(nomTable,{id},{vChamps[3]},{"\""+prenom+"\""},"","id");
+}
+
+bool Adherent::modifierPrenoms(const vector<unsigned int> &ids,const string &prenom){
+    return Root::recupererBD().modifier(nomTable,ids,{vChamps[3]},{"\""+prenom+"\""},"","id");
+}
+
 bool Adherent::modifierAddresse(unsigned int id,const string addresse){
     return Root::recupererBD().modifier(nomTable,{id},{vChamps[1]},{"\""+addresse+"\""},"","id");
 }
@@ -28,34 +38,118 @@ bool Adherent::modifierAddresses(const vector<unsigned int> &ids,const string &a
     return Root::recupererBD().modifier(nomTable,ids,{vChamps[1]},{"\""+addresse+"\""},"","id");
 }
 
-unsigned int Adherent::modifierNoms_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &noms){
+bool Adherent::modifierEmail(unsigned int id,const string email){
+    return Root::recupererBD().modifier(nomTable,{id},{vChamps[4]},{"\""+email+"\""},"","id");
+}
+
+bool Adherent::modifieEmails(const vector<unsigned int> &ids,const string &email){
+    return Root::recupererBD().modifier(nomTable,ids,{vChamps[4]},{"\""+email+"\""},"","id");
+}
+
+bool Adherent::modifierDateDeNaissance(unsigned int id,const string dateDeNaissance){
+    return Root::recupererBD().modifier(nomTable,{id},{vChamps[5]},{"\""+dateDeNaissance+"\""},"","id");
+}
+
+bool Adherent::modifierDateDeNaissances(const vector<unsigned int> &ids,const string &dateDeNaissance){
+    return Root::recupererBD().modifier(nomTable,ids,{vChamps[5]},{"\""+dateDeNaissance+"\""},"","id");
+}
+
+bool Adherent::modifierSexe(unsigned int id,const string sexe){
+    return Root::recupererBD().modifier(nomTable,{id},{vChamps[6]},{"\""+sexe+"\""},"","id");
+}
+
+bool Adherent::modifierSexes(const vector<unsigned int> &ids,const string &sexe){
+    return Root::recupererBD().modifier(nomTable,ids,{vChamps[6]},{"\""+sexe+"\""},"","id");
+}
+
+bool Adherent::modifierNoms_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &noms){
     unsigned int idsLen = ids.size();
     unsigned int nomsLen = noms.size();
-    unsigned int nbrChampsModifie = 0;
+    bool err = false;
 
     if(idsLen == nomsLen){
         for(unsigned int i=0; i<idsLen ; i++){
             if(modifierNom(ids[i],noms[i])){
-                nbrChampsModifie++;
+                err = true;
             }
         }
-        return nbrChampsModifie;
-    }else return -1;
+    }
+    return err;
 }
 
-unsigned int Adherent::modifieraddresses_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &addresses){
+bool Adherent::modifierPrenoms_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &prenoms){
+    unsigned int idsLen = ids.size();
+    unsigned int prenomsLen = prenoms.size();
+    bool err = false;
+
+    if(idsLen == prenomsLen){
+        for(unsigned int i=0; i<idsLen ; i++){
+            if(modifierPrenom(ids[i],prenoms[i])){
+                err = true;
+            }
+        }
+    }
+    return err;
+}
+
+bool Adherent::modifierAddresses_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &addresses){
     unsigned int idsLen = ids.size();
     unsigned int addressesLen = addresses.size();
-    unsigned int nbrChampsModifie = 0;
+    bool err = false;
 
     if(idsLen == addressesLen){
         for(unsigned int i=0; i<idsLen ; i++){
             if(modifierAddresse(ids[i],addresses[i])){
-                nbrChampsModifie++;
+                err=true;
             }
         }
-        return nbrChampsModifie;
-    }else return -1;
+    }
+    return err;
+}
+
+bool Adherent::modifierEmails_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &emails){
+    unsigned int idsLen = ids.size();
+    unsigned int emailsLen = emails.size();
+    bool err = false;
+
+    if(idsLen == emailsLen){
+        for(unsigned int i=0; i<idsLen ; i++){
+            if(modifierEmail(ids[i],emails[i])){
+                err=true;
+            }
+        }
+    }
+    return err;
+}
+
+bool Adherent::modifierDateDeNaissances_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &dateDeNaissances){
+    unsigned int idsLen = ids.size();
+    unsigned int dateDeNaissancesLen = dateDeNaissances.size();
+    bool err = false;
+
+    if(idsLen == dateDeNaissancesLen){
+        for(unsigned int i=0; i<idsLen ; i++){
+            if(modifierDateDeNaissance(ids[i],dateDeNaissances[i])){
+                err=true;
+            }
+        }
+    }
+    return err;
+}
+
+bool Adherent::modifierSexes_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &sexes){
+    unsigned int idsLen = ids.size();
+    unsigned int sexesLen = sexes.size();
+    bool err = false;
+
+    if(idsLen == sexesLen){
+        for(unsigned int i=0; i<idsLen ; i++){
+            if(modifierSexe(ids[i],sexes[i])){
+                err=true;
+            }
+        }
+    }
+    return err;
 }
 
 bool Adherent::supprimer(unsigned int id){
@@ -72,7 +166,9 @@ bool Adherent::consulter(vector<AdherentData> &adherents,const string &concat){
     if(!Root::recupererBD().consulter(nomTable,vChamps,vValeurs,concat)) return false;
 
     for(unsigned int i=0;i<vValeurs.size();i+=vChamps.size()){
-        AdherentData data(vValeurs[i],vValeurs[i+1],strtoll(vValeurs[i+2].c_str(),NULL,10));
+        AdherentData data(Util::str_to_integer(vValeurs[i]),vValeurs[i+1],
+                vValeurs[i+2],strtoll(vValeurs[i+3].c_str(),NULL,10),
+                vValeurs[i+4],vValeurs[i+5],vValeurs[i+6],vValeurs[i+7]);
         adherents.push_back(data);
     }
 
@@ -85,7 +181,9 @@ bool Adherent::consulter(vector<AdherentData> &adherents,const vector<unsigned i
     if(!Root::recupererBD().consulter(nomTable,ids,vChamps,vValeurs,condition,concat)) return false;
 
     for(unsigned int i=0;i<vValeurs.size();i+=vChamps.size()){
-        AdherentData data(vValeurs[i],vValeurs[i+1],strtoll(vValeurs[i+2].c_str(),NULL,10));
+        AdherentData data(Util::str_to_integer(vValeurs[i]),vValeurs[i+1],
+                vValeurs[i+2],strtoll(vValeurs[i+3].c_str(),NULL,10),
+                vValeurs[i+4],vValeurs[i+5],vValeurs[i+6],vValeurs[i+7]);
         adherents.push_back(data);
     }
 
@@ -148,7 +246,7 @@ unsigned int Adherent::importToVector(vector<AdherentData> &data,string nom_fich
             else{
                 dataTemp = Util::splitString(ligne,separateur);
 
-                AdherentData ad(dataTemp[0],dataTemp[1],strtoll(dataTemp[2].c_str(),NULL,10));
+                AdherentData ad(Util::str_to_integer(dataTemp[0]),dataTemp[1],dataTemp[2],strtoll(dataTemp[3].c_str(),NULL,10),dataTemp[4],dataTemp[5],dataTemp[6],dataTemp[7]);
                 data.push_back(ad);
                 i++;
             }
@@ -174,17 +272,19 @@ unsigned int Adherent::importToDB(string nom_fichier,const string &separateur){
 
 //----------------AdherentData--------------
 
-AdherentData::AdherentData(string nom,
-                           string addresse,
-                           unsigned int nbreLivresEmprunter){
+AdherentData::AdherentData(unsigned int id,string nom,
+    string addresse,
+    unsigned int nbreLivresEmprunter,
+    string prenom,string email, string dateDeNaissance, string sexe){
+
+    this->id = id;
     this->nom = nom;
+    this->prenom = prenom;
     this->addresse = addresse;
     this->nbreLivresEmprunter = nbreLivresEmprunter;
-}
-
-AdherentData::AdherentData(unsigned int id,string nom,string addresse,unsigned int nbreLivresEmprunter):
-AdherentData(nom,addresse,nbreLivresEmprunter){
-    this->id = id;
+    this->email = email;
+    this->dateDeNaissance = dateDeNaissance;
+    this->sexe = sexe;
 }
 
 AdherentData::AdherentData(const AdherentData &ad){

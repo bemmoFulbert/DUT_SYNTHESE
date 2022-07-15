@@ -48,8 +48,8 @@ class Auteur{
          *  en temps normal on retourne le nombre de champs modifies
          *  on ne fait rien si les deux(02) vecteurs n'ont pas la meme taille et on retourne -1
          */
-        static unsigned int modifierNoms_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &noms);
-        static unsigned int modifierPrenoms_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &prenoms);
+        static bool modifierNoms_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &noms);
+        static bool modifierPrenoms_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &prenoms);
 
         static bool exportToFile(vector<AuteurData> &data,const string &nom_fichier,const string &separateur=" ");
         static bool exportToFile(const string &nom_fichier,const string &separateur=" ");
@@ -57,6 +57,7 @@ class Auteur{
         static unsigned int importToDB(string nom_fichier,const string &separateur=" "); // met dans la base de donnees
     private:
         static vector<string> vChamps;
+        static vector<string> vChamps_full;
         static string nomTable;
 };
 

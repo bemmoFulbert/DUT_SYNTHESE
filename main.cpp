@@ -19,13 +19,16 @@ int main(int argc, char *argv[])
     BDR_SQLite3 bd("dut_puc2442_proj.db");
     Root::chargerBD(bd);
 
+    //vector<AdherentData> v;
+    //Adherent::consulter(v);
+
     vector<LivreData> v;
-    Livre::consulter(v,{5},"");
-    //Livre::ajouterNbreDeCopies(3,38);
+    Livre::consulter(v);
+    Livre::exportToFile("Livres.txt");
+
+   //AdherentData::affiche_adherentData(v);
 
     LivreData::affiche_livreData(v);
-
-    //AdherentData::affiche_adherentData(v);
 
     //w.show();
     //return a.exec();

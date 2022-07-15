@@ -15,11 +15,6 @@ using namespace __gnu_cxx;      //For using c++ <hashmap>
 //-----------------------declaration LivreData ---------------------------------
 class LivreData : public RefCounted {
     public:
-        LivreData(string titre,
-            string dateDePublication,
-            unsigned int nbreExemplairesTotal,
-            unsigned int nbreExemplairesEmprunter,
-            unsigned int id_auteur);
         LivreData(unsigned int id,
             string titre,
             string dateDePublication,
@@ -65,8 +60,8 @@ class Livre{
              *  en temps normal on retourne le nombre de champs modifies
              *  on ne fait rien si les deux(02) vecteurs n'ont pas la meme taille et on retourne -1
              */
-            static unsigned int modifierTitres_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &titres);
-            static unsigned int modifierDateDePublications_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &dateDePublications);
+            static bool modifierTitres_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &titres);
+            static bool modifierDateDePublications_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &dateDePublications);
 
             static bool ajouterNbreDeCopies(unsigned int id,unsigned int nbreAAjouter);
             static bool enleverNbreDeCopies(unsigned int id,unsigned int nbreAEnlever);
@@ -79,6 +74,7 @@ class Livre{
             static unsigned int importToDB(string nom_fichier,const string &separateur=" "); // met dans la base de donnees
         private:
             static vector<string> vChamps;
+            static vector<string> vChamps_full;
             static string nomTable;
 
             static bool getAuteurDataPtrs(hash_map<unsigned int,AuteurData*> &vals,const vector<unsigned int> &ids,const string &concat="");
