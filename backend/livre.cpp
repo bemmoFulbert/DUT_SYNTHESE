@@ -1,5 +1,6 @@
 #include "livre.h"
 
+#include <cstring>
 #include <string>
 #include <vector>
 
@@ -9,25 +10,25 @@ vector<string> Livre::vChamps = {"titre","dateDePub","nbreExemplairesTotal","nbr
 string Livre::nomTable = "livre";
 
 bool Livre::ajouter(const string titre,const string dateDePublication,unsigned int id_auteur){
-    vector<string> vValeurs = {"'"+titre+"'","'"+dateDePublication+"'","'"+to_string(100)+"'","'"+to_string(0)+"'","'"+to_string(id_auteur)+"'"};
+    vector<string> vValeurs = {"\""+titre+"\"","\""+dateDePublication+"\"","\""+to_string(100)+"\"","\""+to_string(0)+"\"","\""+to_string(id_auteur)+"\""};
 
     return Root::recupererBD().ajouter(nomTable,vChamps,vValeurs);
 }
 
 bool Livre::modifierTitre(unsigned int id,const string &titre){
-    return Root::recupererBD().modifier(nomTable,{id},{vChamps[0]},{"'"+titre+"'"},"","id");
+    return Root::recupererBD().modifier(nomTable,{id},{vChamps[0]},{"\""+titre+"\""},"","id");
 }
 
 bool Livre::modifierTitres(const vector<unsigned int> &ids,const string &titre){
-    return Root::recupererBD().modifier(nomTable,ids,{vChamps[0]},{"'"+titre+"'"},"","id");
+    return Root::recupererBD().modifier(nomTable,ids,{vChamps[0]},{"\""+titre+"\""},"","id");
 }
 
 bool Livre::modifierDateDePublication(unsigned int id,const string &dateDePublication){
-    return Root::recupererBD().modifier(nomTable,{id},{vChamps[1]},{"'"+dateDePublication+"'"},"","id");
+    return Root::recupererBD().modifier(nomTable,{id},{vChamps[1]},{"\""+dateDePublication+"\""},"","id");
 }
 
 bool Livre::modifierDateDePublications(const vector<unsigned int> &ids,const string &dateDePublication){
-    return Root::recupererBD().modifier(nomTable,ids,{vChamps[1]},{"'"+dateDePublication+"'"},"","id");
+    return Root::recupererBD().modifier(nomTable,ids,{vChamps[1]},{"\""+dateDePublication+"\""},"","id");
 }
 
 unsigned int Livre::modifierTitres_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &titres){
@@ -78,7 +79,7 @@ bool Livre::consulter(vector<LivreData> &livres,const string &concat){
         livres.push_back(data);
     }
 
-    dut_puc2442_proj_backend_fill_child_field(AuteurData,LivreData,id_auteur,auteur,livres,NULL,Livre::getAuteurDataPtrs,concat,false);
+    if (vValeurs.size())   dut_puc2442_proj_backend_fill_child_field(AuteurData,LivreData,id_auteur,auteur,livres,NULL,Livre::getAuteurDataPtrs,false);
 
     return true;
 }
@@ -93,7 +94,7 @@ bool Livre::consulter(vector<LivreData> &livres,const vector<unsigned int> &ids,
         livres.push_back(data);
     }
 
-    dut_puc2442_proj_backend_fill_child_field(AuteurData,LivreData,id_auteur,auteur,livres,&ids,Livre::getAuteurDataPtrs,"",false);
+    if (vValeurs.size())    dut_puc2442_proj_backend_fill_child_field(AuteurData,LivreData,id_auteur,auteur,livres,&ids,Livre::getAuteurDataPtrs,false);
 
     /*
     hash_map<unsigned int,AuteurData*> h1;
@@ -128,7 +129,7 @@ bool Livre::consulterLivresEmprunterTrieParDate(vector<LivreData> &livres,bool i
 bool Livre::exportToFile(vector<LivreData> &data, const string &nom_fichier, const string &separateur){
     ofstream flux(nom_fichier.c_str());
     if(flux){
-        flux << "// fichier d'exportation de livres" <<endl;
+        flux << "// fichier d\"exportation de livres" <<endl;
         flux << "// "<< Util::vectorToString(vChamps,separateur) << endl <<endl;
 
         for(unsigned int i=0;i<data.size();i++){
@@ -137,7 +138,7 @@ bool Livre::exportToFile(vector<LivreData> &data, const string &nom_fichier, con
         return true;
     }
     else {
-        cout << "erreur d'ouverture du fichier \"" << nom_fichier << "\"" << endl;
+        cout << "erreur d\"ouverture du fichier \"" << nom_fichier << "\"" << endl;
         return false;
     }
 }
@@ -171,7 +172,7 @@ unsigned int Livre::importToVector(vector<LivreData> &data,string nom_fichier,co
         return i;
     }
     else{
-        cout << "erreur d'ouverture du fichier \"" << nom_fichier << "\"" << endl;
+        cout << "erreur d\"ouverture du fichier \"" << nom_fichier << "\"" << endl;
         return 0;
     }
 }
@@ -197,25 +198,20 @@ bool Livre::enleverNbreDeCopies(unsigned int id,unsigned int nbreAEnlever){
     return Root::recupererBD().executerCommandeSQL(requete);
 }
 
-bool Livre::getAuteurDataPtrs(hash_map<unsigned int,AuteurData*> &vals,const vector<unsigned int> *ids,const string &concat){
+bool Livre::getAuteurDataPtrs(hash_map<unsigned int,AuteurData*> &vals,const vector<unsigned int> &ids,const string &concat){
     vector<AuteurData> auteurs;
 
-    bool res;
-
-    if (ids){
-        res = Auteur::consulter(auteurs,*ids);
-    }
-    else{
-        res = Auteur::consulter(auteurs,concat);
-    }
+    bool res = Auteur::consulter(auteurs,ids);
 
     if (!res)    return res;
 
     for (unsigned int i = 0 ; i < auteurs.size() ; i++){
-        const unsigned int &id = auteurs[i].id;
+        const unsigned int &id = ids[i];
         AuteurData *aut = new AuteurData(auteurs[i]);
+        aut->unsafe_setRefCount(0);     //Inorder to not consider it's reference in the hashmap
         vals[id] = aut;
     }
+
     return true;
 }
 
@@ -253,13 +249,20 @@ LivreData::~LivreData(){
 }
 
 void LivreData::operator=(const LivreData &ld){
-    *this = ld;
+    this->id = ld.id;
+    this->titre = ld.titre;
+    this->dateDePublication = ld.dateDePublication;
+    this->nbreExemplairesEmprunter = ld.nbreExemplairesEmprunter;
+    this->nbreExemplairesTotal = ld.nbreExemplairesTotal;
+    this->id_auteur = ld.id_auteur;
+    this->auteur = ld.auteur;
+
     if (this->auteur)   this->auteur->ref();
 }
 
 void LivreData::affiche_livreData(vector<LivreData> &v){
     for(unsigned int i = 0;i<v.size();i++){
-        cout << v[i].titre << " - " << v[i].dateDePublication << " - " << v[i].nbreExemplairesTotal << " - "<< v[i].nbreExemplairesEmprunter << " - "<< v[i].id_auteur << endl;
+        cout << v[i].titre << " - " << v[i].dateDePublication << " - " << v[i].nbreExemplairesTotal << " - "<< v[i].nbreExemplairesEmprunter << " - "<< v[i].id_auteur <<  endl;
     }
 }
 

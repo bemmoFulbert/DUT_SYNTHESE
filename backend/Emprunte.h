@@ -3,8 +3,7 @@
 
 #include <string>
 #include <vector>
-
-#include "UniqueSet.h"
+#include <hash_map>
 
 #include "root.h"
 #include "adherent.h"
@@ -51,7 +50,12 @@ class EmprunteData{
 
     public:
         void operator=(const EmprunteData &ed){
-            *this = ed;
+            this->date = ed.date;
+            this->id_adherent = ed.id_adherent;
+            this->id_livre = ed.id_livre;
+            this->livre = ed.livre;
+            this->adherent = ed.adherent;
+
             if (livre)      livre->ref();
             if (adherent)      adherent->ref();
         };
@@ -64,63 +68,43 @@ class Emprunte{
 
             Root::recupererBD().consulter("Emprunte",{"date","livre_id","adherent_id"},vals,"WHERE (date >= " + dateG + " AND  date <= " + dateD + ")");
 
-            UniqueSet<unsigned int> ids_livre;
-            UniqueSet<unsigned int> ids_adherent;
-
             for (unsigned int i = 0 ; i < vals.size() ; i+=3){
                 emprunts.push_back(EmprunteData(vals[i],Util::str_to_integer(vals[i+1]),Util::str_to_integer(vals[i+2])));
-
-                ids_livre.push_back(emprunts[i].id_livre);
-                ids_adherent.push_back(emprunts[i].id_adherent);
             }
 
-            dut_puc2442_proj_backend_fill_child_field(LivreData,EmprunteData,id_livre,livre,emprunts,&ids_livre.getInternalVector(),getLivreDataPtrs,"",false);
-            dut_puc2442_proj_backend_fill_child_field(AdherentData,EmprunteData,id_adherent,adherent,emprunts,&ids_adherent.getInternalVector(),getAdherentDataPtrs,"",false);
-
+            dut_puc2442_proj_backend_fill_child_field(LivreData,EmprunteData,id_livre,livre,emprunts,NULL,getLivreDataPtrs,false);
+            dut_puc2442_proj_backend_fill_child_field(AdherentData,EmprunteData,id_adherent,adherent,emprunts,NULL,getAdherentDataPtrs,false);
 
             return true;
         };
 
     private:
-        static bool getLivreDataPtrs(hash_map<unsigned int,LivreData*> &vals,const vector<unsigned int> *ids=NULL,const string &concat=""){
+        //ids vector is gotten from a unique set
+        static bool getLivreDataPtrs(hash_map<unsigned int,LivreData*> &vals,const vector<unsigned int> &ids){
             vector<LivreData> livres;
 
-            bool res;
-
-            if (ids){
-                res = Livre::consulter(livres,*ids);
-            }
-            else{
-                res = Livre::consulter(livres,concat);
-            }
-
-            if (!res)    return res;
+            bool res = Livre::consulter(livres,ids);
 
             for (unsigned int i = 0 ; i < livres.size() ; i++){
-                const unsigned int &id = livres[i].id;
+                const unsigned int &id = ids[i];
                 LivreData *liv = new LivreData(livres[i]);
+                liv->unsafe_setRefCount(0);     //Inorder to not consider it's reference in the hashmap
                 vals[id] = liv;
             }
             return true;
         };
 
-        static bool getAdherentDataPtrs(hash_map<unsigned int,AdherentData*> &vals,const vector<unsigned int> *ids=NULL,const string &concat=""){
+        static bool getAdherentDataPtrs(hash_map<unsigned int,AdherentData*> &vals,const vector<unsigned int> &ids){
             vector<AdherentData> adherents;
 
-            bool res;
-
-            if (ids){
-                res = Adherent::consulter(adherents,*ids);
-            }
-            else{
-                res = Adherent::consulter(adherents,concat);
-            }
+            bool res = Adherent::consulter(adherents,ids);
 
             if (!res)    return res;
 
             for (unsigned int i = 0 ; i < adherents.size() ; i++){
-                const unsigned int &id = adherents[i].id;
+                const unsigned int &id = ids[i];
                 AdherentData *adh = new AdherentData(adherents[i]);
+                adh->unsafe_setRefCount(0);     //Inorder to not consider it's reference in the hashmap
                 vals[id] = adh;
             }
             return true;

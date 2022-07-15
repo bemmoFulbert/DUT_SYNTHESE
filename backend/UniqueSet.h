@@ -28,7 +28,7 @@ class UniqueSet{
             return false;
         };
 
-        const vector<T>& getInternalVector(){return vec;};
+        const vector<T>& getInternalVector() const{return vec;};
 
     public:
         T operator[](unsigned int i) const{

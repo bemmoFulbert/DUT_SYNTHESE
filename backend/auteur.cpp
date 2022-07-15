@@ -5,25 +5,25 @@ vector<string> Auteur::vChamps = {"nom","prenom"};
 string Auteur::nomTable = "auteur";
 
 bool Auteur::ajouter(const string &nom,const string &prenom){
-    vector<string> vValeurs = {"'"+nom+"'","'"+prenom+"'"};
+    vector<string> vValeurs = {"\""+nom+"\"","\""+prenom+"\""};
 
     return Root::recupererBD().ajouter(nomTable,vChamps,vValeurs);
 }
 
 bool Auteur::modifierNoms(const vector<unsigned int> &ids,const string &nom){
-    return Root::recupererBD().modifier(nomTable,ids,{vChamps[0]},{"'"+nom+"'"});
+    return Root::recupererBD().modifier(nomTable,ids,{vChamps[0]},{"\""+nom+"\""});
 }
 
 bool Auteur::modifierNom(unsigned int id,const string &nom){
-    return Root::recupererBD().modifier(nomTable,{id},{vChamps[0]},{"'"+nom+"'"},"","id");
+    return Root::recupererBD().modifier(nomTable,{id},{vChamps[0]},{"\""+nom+"\""},"","id");
 }
 
 bool Auteur::modifierPrenom(unsigned int id,const string &prenom){
-    return Root::recupererBD().modifier(nomTable,{id},{vChamps[1]},{"'"+prenom+"'"},"","id");
+    return Root::recupererBD().modifier(nomTable,{id},{vChamps[1]},{"\""+prenom+"\""},"","id");
 }
 
 bool Auteur::modifierPrenoms(const vector<unsigned int> &ids,const string &prenom){
-    return Root::recupererBD().modifier(nomTable,ids,{vChamps[1]},{"'"+prenom+"'"},"","id");
+    return Root::recupererBD().modifier(nomTable,ids,{vChamps[1]},{"\""+prenom+"\""},"","id");
 }
 
 unsigned int Auteur::modifierNoms_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &noms){
@@ -92,7 +92,7 @@ bool Auteur::consulter(vector<AuteurData> &auteurs,const vector<unsigned int> &i
 bool Auteur::exportToFile(vector<AuteurData> &data, const string &nom_fichier, const string &separateur){
     ofstream flux(nom_fichier.c_str());
     if(flux){
-        flux << "// fichier d'exportation d'auteurs" <<endl;
+        flux << "// fichier d\"exportation d\"auteurs" <<endl;
         flux << "// " << Util::vectorToString(vChamps,separateur)  << endl <<endl;
 
         for(unsigned int i=0;i<data.size();i++){
@@ -101,7 +101,7 @@ bool Auteur::exportToFile(vector<AuteurData> &data, const string &nom_fichier, c
         return true;
     }
     else {
-        cout << "erreur d'ouverture du fichier \"" << nom_fichier << "\"" << endl;
+        cout << "erreur d\"ouverture du fichier \"" << nom_fichier << "\"" << endl;
         return false;
     }
 }
@@ -136,7 +136,7 @@ unsigned int Auteur::importToVector(vector<AuteurData> &data,string nom_fichier,
         return i;
     }
     else{
-        cout << "erreur d'ouverture du fichier \"" << nom_fichier << "\"" << endl;
+        cout << "erreur d\"ouverture du fichier \"" << nom_fichier << "\"" << endl;
         return 0;
     }
 }

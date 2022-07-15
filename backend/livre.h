@@ -81,7 +81,7 @@ class Livre{
             static vector<string> vChamps;
             static string nomTable;
 
-            static bool getAuteurDataPtrs(hash_map<unsigned int,AuteurData*> &vals,const vector<unsigned int> *ids=NULL,const string &concat="");
+            static bool getAuteurDataPtrs(hash_map<unsigned int,AuteurData*> &vals,const vector<unsigned int> &ids,const string &concat="");
     };
 
 #endif // LIVRE_H

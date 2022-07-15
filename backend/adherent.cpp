@@ -7,25 +7,25 @@ string Adherent::nomTable = "adherent";
 
 
 bool Adherent::ajouter(const string nom,const string addresse){
-    vector<string> vValeurs = {"'"+nom+"'","'"+addresse+"'","'"+to_string(0)+"'"};
+    vector<string> vValeurs = {"\""+nom+"\"","\""+addresse+"\"","\""+to_string(0)+"\""};
 
     return Root::recupererBD().ajouter(nomTable,vChamps,vValeurs);
 }
 
 bool Adherent::modifierNom(unsigned int id,const string &nom){
-    return Root::recupererBD().modifier(nomTable,{id},{vChamps[0]},{"'"+nom+"'"},"","id");
+    return Root::recupererBD().modifier(nomTable,{id},{vChamps[0]},{"\""+nom+"\""},"","id");
 }
 
 bool Adherent::modifierNoms(const vector<unsigned int> &ids, const string &nom){
-    return Root::recupererBD().modifier(nomTable,ids,{vChamps[0]},{"'"+nom+"'"},"","id");
+    return Root::recupererBD().modifier(nomTable,ids,{vChamps[0]},{"\""+nom+"\""},"","id");
 }
 
 bool Adherent::modifierAddresse(unsigned int id,const string addresse){
-    return Root::recupererBD().modifier(nomTable,{id},{vChamps[1]},{"'"+addresse+"'"},"","id");
+    return Root::recupererBD().modifier(nomTable,{id},{vChamps[1]},{"\""+addresse+"\""},"","id");
 }
 
 bool Adherent::modifierAddresses(const vector<unsigned int> &ids,const string &addresse){
-    return Root::recupererBD().modifier(nomTable,ids,{vChamps[1]},{"'"+addresse+"'"},"","id");
+    return Root::recupererBD().modifier(nomTable,ids,{vChamps[1]},{"\""+addresse+"\""},"","id");
 }
 
 unsigned int Adherent::modifierNoms_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &noms){
@@ -79,8 +79,6 @@ bool Adherent::consulter(vector<AdherentData> &adherents,const string &concat){
     return true;
 }
 
-#include <cstring>
-
 bool Adherent::consulter(vector<AdherentData> &adherents,const vector<unsigned int> &ids,const string &condition,const string &concat){
     vector<string> vValeurs;
 
@@ -115,7 +113,7 @@ bool Adherent::consulterEmprunteurTrieParDate(vector<AdherentData> &adherents,bo
 bool Adherent::exportToFile(vector<AdherentData> &data,const string &nom_fichier,const string &separateur){
     ofstream flux(nom_fichier.c_str());
     if(flux){
-        flux << "// fichier d'exportation de adherents" <<endl;
+        flux << "// fichier d\"exportation de adherents" <<endl;
         flux << "// "<< Util::vectorToString(vChamps,separateur) << endl <<endl;
 
         for(unsigned int i=0;i<data.size();i++){
@@ -124,7 +122,7 @@ bool Adherent::exportToFile(vector<AdherentData> &data,const string &nom_fichier
         return true;
     }
     else {
-        cout << "erreur d'ouverture du fichier \"" << nom_fichier << "\"" << endl;
+        cout << "erreur d\"ouverture du fichier \"" << nom_fichier << "\"" << endl;
         return false;
     }
 }
@@ -158,7 +156,7 @@ unsigned int Adherent::importToVector(vector<AdherentData> &data,string nom_fich
         return i;
     }
     else{
-        cout << "erreur d'ouverture du fichier \"" << nom_fichier << "\"" << endl;
+        cout << "erreur d\"ouverture du fichier \"" << nom_fichier << "\"" << endl;
         return 0;
     }
 }

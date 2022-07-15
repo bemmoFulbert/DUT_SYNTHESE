@@ -23,6 +23,10 @@ class RefCounted{
             }
         };
 
+        long long unsafe_getRefCount(){
+            return ref_count;
+        };
+
         void unsafe_setRefCount(long long val){
             this->ref_count = val;
         };

@@ -28,6 +28,9 @@ class BDR_SQLite3{
         };
         ~BDR_SQLite3(){
             sqlite3_close(db_handle);
+            this->db_handle = NULL;
+
+            cout << "*Avertissement* BDR_SQLite::~BDR_SQLite : ce destructeur a éte appellé" << endl;
         };
 
     public:
