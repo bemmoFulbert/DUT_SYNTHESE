@@ -41,7 +41,7 @@ class AdherentData : public RefCounted{
 //-----------------------declaration AdherentData --------------------------
 class Adherent{
         public:
-            static bool ajouter(const string nom,const string addresse);
+            static bool ajouter(const string &nom,const string &addresse,const string &prenom,const string &email,const string &dateDeNaissance,const string &sexe);
             static bool modifierNom(unsigned int id,const string &nom);
             static bool modifierAddresse(unsigned int id,const string addresse);
 
@@ -76,8 +76,8 @@ class Adherent{
             static bool modifierDateDeNaissances_WithDiffValues(const vector<unsigned int> &ids, const vector<string> &dateDeNaissances);
             static bool modifierSexes_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &sexes);
 
-            static bool emprunterLivre(unsigned int id_livre,unsigned int id_adherent);
-            static bool rendreLivre(unsigned int id_livre,unsigned int id_adherent);
+            static int emprunterLivre(unsigned int id_livre,unsigned int id_adherent);
+            static int rendreLivre(unsigned int id_livre,unsigned int id_adherent);
 
             static bool consulterEmprunteurTrieParNom(vector<AdherentData> &adherents,bool isAsc=true);
             static bool consulterEmprunteurTrieParDate(vector<AdherentData> &adherents,bool isAsc=true);

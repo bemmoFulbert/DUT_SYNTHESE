@@ -23,7 +23,7 @@ class RefCounted{
             }
         };
 
-        long long unsafe_getRefCount(){
+        long long getRefCount(){
             return ref_count;
         };
 

@@ -48,14 +48,19 @@ class BDR_SQLite3{
 
         bool executerCommandeSQL(const string &commande_sql,int (*callback)(void *userdata,int nb_columns,char **row,char **header_row) = NULL,void *userdata = NULL){
             char *err_msg;
-
-            if (sqlite3_exec(this->db_handle,commande_sql.c_str(),callback,userdata,&err_msg)){
+            string com = commande_sql;
+            if (sqlite3_exec(this->db_handle,com.c_str(),callback,userdata,&err_msg)){
                 cerr << "*Fatale* BDR_SQLite::executerCommandeSQL : " << err_msg << endl;
+                cerr << com << endl;
                 sqlite3_free(err_msg);
                 return false;
             }
 
             return true;
+        };
+
+        bool executerCommandeSQL(const string &commande_sql,vector<string> &vals){
+            return executerCommandeSQL(commande_sql,BDR_SQLite3::consulter_cb,(void*)&vals);
         };
 
 
@@ -70,8 +75,10 @@ class BDR_SQLite3{
             }*/
 
             char *err_msg;
-            if (sqlite3_exec(db_handle,WeakSQLCommandGenerator::Insert(nomTable,nomChamps,valeurs).c_str(),NULL,NULL,&err_msg)){
+            string com = WeakSQLCommandGenerator::Insert(nomTable,nomChamps,valeurs);
+            if (sqlite3_exec(db_handle,com.c_str(),NULL,NULL,&err_msg)){
                 cerr << "*Fatale* BDR_SQLite::ajouter : " << err_msg << endl;
+                cerr << com << endl;
                 sqlite3_free(err_msg);
                 return false;
             }
@@ -87,8 +94,10 @@ class BDR_SQLite3{
         */
         bool modifier(const string &nomTable,const vector<string> &nomChamps,const vector<string> &nouvelValeurs,const string &cond=""){
             char *err_msg;
-            if (sqlite3_exec(db_handle,WeakSQLCommandGenerator::Update(nomTable,nomChamps,nouvelValeurs,cond).c_str(),NULL,NULL,&err_msg)){
+            string com = WeakSQLCommandGenerator::Update(nomTable,nomChamps,nouvelValeurs,cond);
+            if (sqlite3_exec(db_handle,com.c_str(),NULL,NULL,&err_msg)){
                 cerr << "*Fatale* BDR_SQLite::modifier : " << err_msg << endl;
+                cerr << com << endl;
                 sqlite3_free(err_msg);
                 return false;
             }
@@ -122,8 +131,10 @@ class BDR_SQLite3{
         //Supprime les tuples en se basant sur des conditions
         bool supprimer(const string &nomTable,const string &cond=""){
             char *err_msg;
-            if (sqlite3_exec(db_handle,WeakSQLCommandGenerator::Delete(nomTable,cond).c_str(),NULL,NULL,&err_msg) != 0){
+            string com = WeakSQLCommandGenerator::Delete(nomTable,cond);
+            if (sqlite3_exec(db_handle,com.c_str(),NULL,NULL,&err_msg) != 0){
                 cerr << "*Fatale* BDR_SQLite::supprimer : " << err_msg << endl;
+                cerr << com << endl;
                 sqlite3_free(err_msg);
                 return false;
             }
@@ -147,11 +158,11 @@ class BDR_SQLite3{
         //Consulte uniquement les champs specifier dans le vecteur nomChamps
 
         bool consulter(const string &nomTable,const vector<string> &nomChamps,vector<string> &valeurs,const string &concat=""){
-            cout << WeakSQLCommandGenerator::SelectFromOneTable(nomTable,nomChamps,concat) << endl;
-
             char *err_msg;
-            if (sqlite3_exec(db_handle,WeakSQLCommandGenerator::SelectFromOneTable(nomTable,nomChamps,concat).c_str(),consulter_cb,(void*)&valeurs,&err_msg) != 0){
+            string com = WeakSQLCommandGenerator::SelectFromOneTable(nomTable,nomChamps,concat);
+            if (sqlite3_exec(db_handle,com.c_str(),consulter_cb,(void*)&valeurs,&err_msg) != 0){
                 cerr << "*Fatale* BDR_SQLite::consulter : " << err_msg << endl;
+                cerr << com << endl;
                 sqlite3_free(err_msg);
                 return false;
             }
@@ -198,8 +209,10 @@ class BDR_SQLite3{
         //Consulte des champs de plusieurs tables
         bool consulter(const vector<string> &nomTables,const vector<vector<string>> &tabNomChamps,vector<string> &valeurs,const string &concat=""){
             char *err_msg;
-            if (sqlite3_exec(db_handle,WeakSQLCommandGenerator::SelectFromManyTables(nomTables,tabNomChamps,concat).c_str(),consulter_cb,(void*)&valeurs,&err_msg) != 0){
+            string com = WeakSQLCommandGenerator::SelectFromManyTables(nomTables,tabNomChamps,concat);
+            if (sqlite3_exec(db_handle,com.c_str(),consulter_cb,(void*)&valeurs,&err_msg) != 0){
                 cerr << "*Fatale* BDR_SQLite::consulter : " << err_msg << endl;
+                cerr << com << endl;
                 sqlite3_free(err_msg);
                 return false;
             }

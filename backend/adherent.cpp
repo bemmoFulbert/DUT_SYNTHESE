@@ -8,9 +8,8 @@ vector<string> Adherent::vChamps_full = {"id","nom","addresse","nbreLivresEmprun
 string Adherent::nomTable = "adherent";
 
 
-bool Adherent::ajouter(const string nom,const string addresse){
-    vector<string> vValeurs = {"\""+nom+"\"","\""+addresse+"\"","\""+to_string(0)+"\""};
-
+bool Adherent::ajouter(const string &nom,const string &addresse,const string &prenom,const string &email,const string &dateDeNaissance,const string &sexe){
+    vector<string> vValeurs = {"\""+nom+"\"","\""+addresse+"\"","\""+to_string(0)+"\"","\""+prenom+"\"","\""+email+"\"","\""+dateDeNaissance+"\"","\""+sexe+"\""};
     return Root::recupererBD().ajouter(nomTable,vChamps,vValeurs);
 }
 
@@ -265,38 +264,49 @@ unsigned int Adherent::importToDB(string nom_fichier,const string &separateur){
     unsigned int nbrAjout = importToVector(data,nom_fichier,separateur);
 
     for(unsigned int i=0;i<data.size();i++){
-        ajouter(data[i].nom,data[i].addresse);
+        ajouter(data[i].nom,data[i].addresse,data[i].prenom,data[i].email,data[i].dateDeNaissance,data[i].sexe);
     }
     return nbrAjout;
 }
 
-bool Adherent::emprunterLivre(unsigned int id_livre,unsigned int id_adherent){
+int Adherent::emprunterLivre(unsigned int id_livre,unsigned int id_adherent){
     vector<string> vChampsEmprunte = {"id_livre","id_adherent","date"};
     vector<string> vValeurs = {to_string(id_livre),to_string(id_adherent),"CURRENT_TIMESTAMP"};
 
+    //Verifier si l'adherent en question a un prét en cours d'une copie de ce livre
+    vector<string> tab_emprunts;
+    vector<string> tab_retours;
+    if (Root::recupererBD().executerCommandeSQL("SELECT id from Emprunte WHERE id_livre="+vValeurs[0]+" AND id_adherent = "+vValeurs[1]+";",tab_emprunts) == false){
+         return -1;
+    }
+    if (Root::recupererBD().executerCommandeSQL("SELECT Retourne.id from Retourne,Emprunte WHERE Retourne.id = Emprunte.id AND id_livre="+vValeurs[0]+" AND id_adherent = "+vValeurs[1]+";",tab_retours) == false){
+        return -1;
+    }
+    if (tab_emprunts.size() != tab_retours.size())    return 1;
+
     if(Root::recupererBD().ajouter("Emprunte",vChampsEmprunte,vValeurs)){
         Root::recupererBD().executerCommandeSQL("UPDATE Adherent SET nbreLivresEmprunter = nbreLivresEmprunter+1 WHERE id="+to_string(id_adherent)+";");
-        Root::recupererBD().executerCommandeSQL("UPDATE Livre SET nbreExemplairesEmprunter = nbreExemplairesEmprunter-1 WHERE id="+to_string(id_livre)+";");
-        return true;
+        Root::recupererBD().executerCommandeSQL("UPDATE Livre SET nbreExemplairesEmprunter = nbreExemplairesEmprunter+1 WHERE id="+to_string(id_livre)+";");
+        return 0;
     }
-    return false;
+    else    return -1;
 }
 
-bool Adherent::rendreLivre(unsigned int id_livre,unsigned int id_adherent){
+int Adherent::rendreLivre(unsigned int id_livre,unsigned int id_adherent){
     vector<string> vValeursVerif;
-    Root::recupererBD().consulter("Emprunte",{"date"},vValeursVerif,"WHERE id_livre="+to_string(id_livre)+" AND id_adherent="+to_string(id_adherent)+" AND date NOT IN (SELECT date_Emprunte FROM Retourne)");
-    if(vValeursVerif[0].empty() || vValeursVerif[0] == "0") return false;
+    Root::recupererBD().consulter("Emprunte",{"id"},vValeursVerif,"WHERE id_livre="+to_string(id_livre)+" AND id_adherent="+to_string(id_adherent)+" AND id NOT IN (SELECT id FROM Retourne)");
+    if(vValeursVerif.size() == 0 /*vValeursVerif[0].empty() || vValeursVerif[0] == "0"*/) return 1;
 
-    string dateEmprunt = vValeursVerif[0];
-    vector<string> vChampsRetourne = {"date_Emprunte","date"};
-    vector<string> vValeurs = {dateEmprunt,"CURRENT_TIMESTAMP"};
+    string idEmprunt = vValeursVerif[0];
+    vector<string> vChampsRetourne = {"id","date"};
+    vector<string> vValeurs = {idEmprunt,"CURRENT_TIMESTAMP"};
 
     if(Root::recupererBD().ajouter("Retourne",vChampsRetourne,vValeurs)){
         Root::recupererBD().executerCommandeSQL("UPDATE Adherent SET nbreLivresEmprunter = nbreLivresEmprunter-1 WHERE id="+to_string(id_adherent)+";");
-        Root::recupererBD().executerCommandeSQL("UPDATE Livre SET nbreExemplairesEmprunter = nbreExemplairesEmprunter+1 WHERE id="+to_string(id_livre)+";");
-        return true;
+        Root::recupererBD().executerCommandeSQL("UPDATE Livre SET nbreExemplairesEmprunter = nbreExemplairesEmprunter-1 WHERE id="+to_string(id_livre)+";");
+        return 0;
     }
-    return false;
+    else    return -1;
 }
 
 //----------------AdherentData--------------

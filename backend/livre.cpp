@@ -10,8 +10,8 @@ vector<string> Livre::vChamps_full = {"id","titre","dateDePub","nbreExemplairesT
 vector<string> Livre::vChamps = {"titre","dateDePub","nbreExemplairesTotal","nbreExemplairesEmprunter","id_auteur"};
 string Livre::nomTable = "livre";
 
-bool Livre::ajouter(const string titre,const string dateDePublication,unsigned int id_auteur){
-    vector<string> vValeurs = {"\""+titre+"\"","\""+dateDePublication+"\"","\""+to_string(100)+"\"","\""+to_string(0)+"\"","\""+to_string(id_auteur)+"\""};
+bool Livre::ajouter(const string titre,const string dateDePublication,unsigned int nbreExemplairesTotal,unsigned int id_auteur){
+    vector<string> vValeurs = {"\""+titre+"\"","\""+dateDePublication+"\"","\""+to_string(nbreExemplairesTotal)+"\"","\""+to_string(0)+"\"","\""+to_string(id_auteur)+"\""};
 
     return Root::recupererBD().ajouter(nomTable,vChamps,vValeurs);
 }
@@ -184,7 +184,7 @@ unsigned int Livre::importToDB(string nom_fichier,const string &separateur){
     unsigned int nbrAjout = importToVector(data,nom_fichier,separateur);
 
     for(unsigned int i=0;i<data.size();i++){
-        ajouter(data[i].titre,data[i].dateDePublication,data[i].id_auteur);
+        ajouter(data[i].titre,data[i].dateDePublication,data[i].nbreExemplairesTotal,data[i].id_auteur);
     }
     return nbrAjout;
 }
@@ -204,7 +204,7 @@ bool Livre::getAuteurDataPtrs(hash_map<unsigned int,AuteurData*> &vals,const vec
 
     bool res = Auteur::consulter(auteurs,ids);
 
-    if (!res)    return res;
+    if (!res)    return false;
 
     for (unsigned int i = 0 ; i < auteurs.size() ; i++){
         const unsigned int &id = ids[i];
