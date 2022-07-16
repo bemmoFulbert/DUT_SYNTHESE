@@ -41,5 +41,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
-    modele/db_v0.0.1.sql \
+    modele/db_v0.0.5.sql \
     modele/dut_puc2442_proj.db

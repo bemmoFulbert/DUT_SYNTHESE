@@ -6,12 +6,20 @@
 
 #include "root.h"
 
-vector<string> Livre::vChamps_full = {"id","titre","dateDePub","nbreExemplairesTotal","nbreExemplairesEmprunter","id_auteur"};
-vector<string> Livre::vChamps = {"titre","dateDePub","nbreExemplairesTotal","nbreExemplairesEmprunter","id_auteur"};
+vector<string> Livre::vChamps_full = {"id","titre","dateDePub","nbreExemplairesTotal","nbreExemplairesEmprunter","id_auteur","image"};
+vector<string> Livre::vChamps = {"titre","dateDePub","nbreExemplairesTotal","nbreExemplairesEmprunter","id_auteur","image"};
+//---------------------------------0-----------1--------------2----------------------3-----------------------4--------5-------------
 string Livre::nomTable = "livre";
 
 bool Livre::ajouter(const string titre,const string dateDePublication,unsigned int id_auteur){
-    vector<string> vValeurs = {"\""+titre+"\"","\""+dateDePublication+"\"","\""+to_string(100)+"\"","\""+to_string(0)+"\"","\""+to_string(id_auteur)+"\""};
+    vector<string> vChamps = {"titre","dateDePub","nbreExemplairesTotal","nbreExemplairesEmprunter","id_auteur"};
+    vector<string> vValeurs = {"\""+titre+"\"","\""+dateDePublication+"\"","\""+to_string(NBR_EXAMPLAIRE_DEPART)+"\"","\""+to_string(0)+"\"","\""+to_string(id_auteur)+"\""};
+
+    return Root::recupererBD().ajouter(nomTable,vChamps,vValeurs);
+}
+
+bool Livre::ajouter(const string titre,const string dateDePublication,unsigned int id_auteur,string image){
+    vector<string> vValeurs = {"\""+titre+"\"","\""+dateDePublication+"\"","\""+to_string(NBR_EXAMPLAIRE_DEPART)+"\"","\""+to_string(0)+"\"","\""+to_string(id_auteur)+"\"","\""+image+"\""};
 
     return Root::recupererBD().ajouter(nomTable,vChamps,vValeurs);
 }
@@ -62,6 +70,29 @@ bool Livre::modifierDateDePublications_WithDiffValues(const vector<unsigned int>
     return err;
 }
 
+bool Livre::modifierImage(unsigned int id,const string &image){
+    return Root::recupererBD().modifier(nomTable,{id},{vChamps[5]},{"\""+image+"\""},"","id");
+}
+
+bool Livre::modifierImage(const vector<unsigned int> &ids, const string &image){
+    return Root::recupererBD().modifier(nomTable,ids,{vChamps[5]},{"\""+image+"\""},"","id");
+}
+
+bool Livre::modifierImages_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &images){
+    unsigned int idsLen = ids.size();
+    unsigned int imagesLen = images.size();
+    bool err = true;
+
+    if(idsLen == imagesLen){
+        for(unsigned int i=0; i<idsLen ; i++){
+            if(!modifierImage(ids[i],images[i])){
+                err = false;
+            }
+        }
+    }else err = false;
+    return err;
+}
+
 bool Livre::supprimer(unsigned int id){
     return Root::recupererBD().supprimer(nomTable,{id},"id");
 }
@@ -76,7 +107,7 @@ bool Livre::consulter(vector<LivreData> &livres,const string &concat){
     if(!Root::recupererBD().consulter(nomTable,vChamps_full,vValeurs,concat)) return false;
 
     for(unsigned int i=0;i<vValeurs.size();i+=vChamps_full.size()){
-        LivreData data(strtoll(vValeurs[i].c_str(),NULL,10),vValeurs[i+1],vValeurs[i+2],strtoll(vValeurs[i+3].c_str(),NULL,10),strtoll(vValeurs[i+4].c_str(),NULL,10),strtoll(vValeurs[i+5].c_str(),NULL,10));
+        LivreData data(strtoll(vValeurs[i].c_str(),NULL,10),vValeurs[i+1],vValeurs[i+2],strtoll(vValeurs[i+3].c_str(),NULL,10),strtoll(vValeurs[i+4].c_str(),NULL,10),strtoll(vValeurs[i+5].c_str(),NULL,10),vValeurs[i+6]);
         livres.push_back(data);
     }
 
@@ -91,7 +122,7 @@ bool Livre::consulter(vector<LivreData> &livres,const vector<unsigned int> &ids,
     if(!Root::recupererBD().consulter(nomTable,ids,vChamps_full,vValeurs,condition,concat)) return false;
 
     for(unsigned int i=0;i<vValeurs.size();i+=vChamps_full.size()){
-        LivreData data(strtoll(vValeurs[i].c_str(),NULL,10),vValeurs[i+1],vValeurs[i+2],strtoll(vValeurs[i+3].c_str(),NULL,10),strtoll(vValeurs[i+4].c_str(),NULL,10),strtoll(vValeurs[i+5].c_str(),NULL,10));
+        LivreData data(strtoll(vValeurs[i].c_str(),NULL,10),vValeurs[i+1],vValeurs[i+2],strtoll(vValeurs[i+3].c_str(),NULL,10),strtoll(vValeurs[i+4].c_str(),NULL,10),strtoll(vValeurs[i+5].c_str(),NULL,10),vValeurs[i+6]);
         livres.push_back(data);
     }
 
@@ -165,7 +196,7 @@ unsigned int Livre::importToVector(vector<LivreData> &data,string nom_fichier,co
             else{
                 dataTemp = Util::splitString(ligne,separateur);
 
-                LivreData ad(strtoll(dataTemp[0].c_str(),NULL,10),dataTemp[1],dataTemp[2],strtoll(dataTemp[3].c_str(),NULL,10),strtoll(dataTemp[4].c_str(),NULL,10),strtoll(dataTemp[5].c_str(),NULL,10));
+                LivreData ad(strtoll(dataTemp[0].c_str(),NULL,10),dataTemp[1],dataTemp[2],strtoll(dataTemp[3].c_str(),NULL,10),strtoll(dataTemp[4].c_str(),NULL,10),strtoll(dataTemp[5].c_str(),NULL,10),dataTemp[6]);
                 data.push_back(ad);
                 i++;
             }
@@ -223,7 +254,8 @@ LivreData::LivreData(unsigned int id,
     string dateDePublication,
     unsigned int nbreExemplairesTotal,
     unsigned int nbreExemplairesEmprunter,
-          unsigned int id_auteur){
+          unsigned int id_auteur,
+          string image){
 
     this->id = id;
     this->titre = titre;
@@ -231,6 +263,7 @@ LivreData::LivreData(unsigned int id,
     this->nbreExemplairesTotal = nbreExemplairesTotal;
     this->nbreExemplairesEmprunter = nbreExemplairesEmprunter;
     this->id_auteur = id_auteur;
+    this->image = image;
 }
 
 LivreData::LivreData(const LivreData &ld){
