@@ -2,6 +2,11 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QSortFilterProxyModel>
+#include <QAbstractTableModel>
+
+#include "frontend/adherenttablemodel.h"
+#include "frontend/adhheadermodel.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -17,5 +22,11 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    QSortFilterProxyModel *filter;
+    AdherentTableModel *adhTableModel;
+    AdhHeaderModel *adhHeaderModel;
+
 };
+
+
 #endif // MAINWINDOW_H

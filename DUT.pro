@@ -15,6 +15,8 @@ SOURCES += \
     backend/livre.cpp \
     backend/root.cpp \
     backend/util.cpp \
+    frontend/adherenttablemodel.cpp \
+    frontend/adhheadermodel.cpp \
     main.cpp \
     mainwindow.cpp
 
@@ -29,6 +31,8 @@ HEADERS += \
     backend/livre.h \
     backend/root.h \
     backend/util.h \
+    frontend/adherenttablemodel.h \
+    frontend/adhheadermodel.h \
     mainwindow.h
 
 FORMS += \
@@ -41,5 +45,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
-    modele/db_v0.0.1.sql \
+    modele/db_v0.0.5.sql \
     modele/dut_puc2442_proj.db

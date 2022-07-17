@@ -8,6 +8,7 @@
 
 #include "BDR_SQLite3.h"
 #include "RefCounted.h"
+#include <QStringList>
 
 #include "util.h"
 
@@ -24,8 +25,9 @@ class AdherentData : public RefCounted{
 
         AdherentData(const AdherentData &ad);
 
-        const string to_string(const string &separateur);
+        const string to_string(const string &separateur=" ");
         static void affiche_adherentData(vector<AdherentData> &v);
+        static void toQStringLists(const vector<AdherentData> &vAdhData,QStringList &ids, QStringList &addresses, QStringList &nbreLivresEmprunters, QStringList &prenoms, QStringList &emails, QStringList &dateDeNaissances,QStringList &sexes);
 
         unsigned int id = -1;
         string nom;
@@ -41,7 +43,11 @@ class AdherentData : public RefCounted{
 //-----------------------declaration AdherentData --------------------------
 class Adherent{
         public:
+<<<<<<< HEAD
             static bool ajouter(const string &nom,const string &addresse,const string &prenom,const string &email,const string &dateDeNaissance,const string &sexe);
+=======
+            static bool ajouter(const string &nom, const string &addresse, const string &prenom, const string &email, const string &dateDeNaissance, const string &sexe);
+>>>>>>> b0c3dba5479333b0f7023b47366a1c5670193393
             static bool modifierNom(unsigned int id,const string &nom);
             static bool modifierAddresse(unsigned int id,const string addresse);
 
@@ -86,7 +92,10 @@ class Adherent{
             static bool exportToFile(const string &nom_fichier,const string &separateur=" ");
             static unsigned int importToVector(vector<AdherentData> &data,string nom_fichier,const string &separateur=" ");//importe dans un tableau dynamique, retourne le nombre d'elements ajoutes
             static unsigned int importToDB(string nom_fichier,const string &separateur=" "); // met dans la base de donnees
-    private:
+            static vector<string> getVChamps_full(){
+                return vChamps_full;
+            }
+private:
         static vector<string> vChamps ;
         static vector<string> vChamps_full;
         static string nomTable;

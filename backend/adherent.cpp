@@ -10,6 +10,10 @@ string Adherent::nomTable = "adherent";
 
 bool Adherent::ajouter(const string &nom,const string &addresse,const string &prenom,const string &email,const string &dateDeNaissance,const string &sexe){
     vector<string> vValeurs = {"\""+nom+"\"","\""+addresse+"\"","\""+to_string(0)+"\"","\""+prenom+"\"","\""+email+"\"","\""+dateDeNaissance+"\"","\""+sexe+"\""};
+<<<<<<< HEAD
+=======
+
+>>>>>>> b0c3dba5479333b0f7023b47366a1c5670193393
     return Root::recupererBD().ajouter(nomTable,vChamps,vValeurs);
 }
 
@@ -162,13 +166,16 @@ bool Adherent::supprimer(const vector<unsigned int> &ids){
 bool Adherent::consulter(vector<AdherentData> &adherents,const string &concat){
     vector<string> vValeurs;
 
-    if(!Root::recupererBD().consulter(nomTable,vChamps,vValeurs,concat)) return false;
+    if(!Root::recupererBD().consulter(nomTable,vChamps_full,vValeurs,concat)) return false;
 
-    for(unsigned int i=0;i<vValeurs.size();i+=vChamps.size()){
+    cerr << vValeurs.size() <<endl;
+    for(unsigned int i=0;i<vValeurs.size();i+=vChamps_full.size()){
+        cerr << i <<endl;
         AdherentData data(Util::str_to_integer(vValeurs[i]),vValeurs[i+1],
                 vValeurs[i+2],strtoll(vValeurs[i+3].c_str(),NULL,10),
                 vValeurs[i+4],vValeurs[i+5],vValeurs[i+6],vValeurs[i+7]);
         adherents.push_back(data);
+        cerr << data.to_string(" , ") << endl;
     }
 
     return true;
@@ -177,13 +184,14 @@ bool Adherent::consulter(vector<AdherentData> &adherents,const string &concat){
 bool Adherent::consulter(vector<AdherentData> &adherents,const vector<unsigned int> &ids,const string &condition,const string &concat){
     vector<string> vValeurs;
 
-    if(!Root::recupererBD().consulter(nomTable,ids,vChamps,vValeurs,condition,concat)) return false;
+    if(!Root::recupererBD().consulter(nomTable,ids,vChamps_full,vValeurs,condition,concat)) return false;
 
-    for(unsigned int i=0;i<vValeurs.size();i+=vChamps.size()){
+    for(unsigned int i=0;i<vValeurs.size();i+=vChamps_full.size()){
         AdherentData data(Util::str_to_integer(vValeurs[i]),vValeurs[i+1],
                 vValeurs[i+2],strtoll(vValeurs[i+3].c_str(),NULL,10),
                 vValeurs[i+4],vValeurs[i+5],vValeurs[i+6],vValeurs[i+7]);
         adherents.push_back(data);
+        cout << data.to_string("--");
     }
 
     return true;
@@ -334,8 +342,12 @@ AdherentData::AdherentData(const AdherentData &ad){
 const string AdherentData::to_string(const string &separateur){
     string *res = new string();
     res->append(nom); res->append(separateur);
-    res->append(addresse); res->append(separateur);
-    res->append(std::to_string(nbreLivresEmprunter));
+    res->append(addresse);res->append(separateur);
+    res->append(std::to_string(nbreLivresEmprunter));res->append(separateur);
+    res->append(prenom); res->append(separateur);
+    res->append(email); res->append(separateur);
+    res->append(dateDeNaissance); res->append(separateur);
+    res->append(sexe); res->append(separateur);
     return *res;
 }
 
@@ -344,3 +356,19 @@ void AdherentData::affiche_adherentData(vector<AdherentData> &v){
         cout << v[i].to_string("-") << endl;
     }
 }
+
+void AdherentData::toQStringLists(const vector<AdherentData> &vAdhData, QStringList &ids, QStringList &addresses, QStringList &nbreLivresEmprunters, QStringList &prenoms, QStringList &emails, QStringList &dateDeNaissances, QStringList &sexes){
+    for (unsigned int i=0;i<vAdhData.size();i++){
+        ids << QString::number(vAdhData[i].id);
+        addresses << QString::fromStdString(vAdhData[i].addresse);
+        nbreLivresEmprunters << QString::number(vAdhData[i].nbreLivresEmprunter);
+        prenoms << QString::fromStdString(vAdhData[i].prenom);
+        emails << QString::fromStdString(vAdhData[i].email);
+        dateDeNaissances << QString::fromStdString(vAdhData[i].dateDeNaissance);
+        sexes << QString::fromStdString(vAdhData[i].sexe);
+    }
+}
+
+
+
+

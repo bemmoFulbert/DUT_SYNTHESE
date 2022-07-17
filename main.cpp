@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 
 #include <QApplication>
+#include <QVBoxLayout>
 
 #include "backend/BDR_SQLite3.h"
 #include "backend/root.h"
@@ -13,24 +14,11 @@
 using namespace std;
 int main(int argc, char *argv[])
 {
-    //QApplication a(argc, argv);
-    //MainWindow w;
-
     BDR_SQLite3 bd("dut_puc2442_proj.db");
     Root::chargerBD(bd);
+    QApplication a(argc, argv);
+    MainWindow w;
 
-    //vector<AdherentData> v;
-    //Adherent::consulter(v);
-
-    vector<LivreData> v;
-    Livre::consulter(v);
-    Livre::exportToFile("Livres.txt");
-
-   //AdherentData::affiche_adherentData(v);
-
-    LivreData::affiche_livreData(v);
-
-    //w.show();
-    //return a.exec();
-    return 0;
+    w.show();
+    return a.exec();
 }

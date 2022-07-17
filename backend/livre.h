@@ -11,6 +11,7 @@
 using namespace std;
 using namespace __gnu_cxx;      //For using c++ <hashmap>
 
+#define NBR_EXAMPLAIRE_DEPART 100
 
 //-----------------------declaration LivreData ---------------------------------
 class LivreData : public RefCounted {
@@ -20,7 +21,8 @@ class LivreData : public RefCounted {
             string dateDePublication,
             unsigned int nbreExemplairesTotal,
             unsigned int nbreExemplairesEmprunter,
-            unsigned int id_auteur);
+            unsigned int id_auteur,
+            string image);
         LivreData(const LivreData &ld);
 
         static void affiche_livreData(vector<LivreData> &v);
@@ -36,6 +38,7 @@ class LivreData : public RefCounted {
         unsigned int nbreExemplairesTotal;
         unsigned int nbreExemplairesEmprunter;
         unsigned int id_auteur;
+        string image;
 
         AuteurData *auteur = NULL;
 
@@ -45,14 +48,21 @@ class LivreData : public RefCounted {
 //-----------------------declaration Livre ------------------------------
 class Livre{
         public:
+<<<<<<< HEAD
             static bool ajouter(const string titre,const string dateDePublication,unsigned int nbreExemplairesTotal,unsigned int id_auteur);
+=======
+            static bool ajouter(const string titre,const string dateDePublication,unsigned int id_auteur);
+            static bool ajouter(const string titre,const string dateDePublication,unsigned int id_auteur,string image);
+>>>>>>> b0c3dba5479333b0f7023b47366a1c5670193393
             static bool modifierTitre(unsigned int id,const string &titre);
             static bool modifierDateDePublication(unsigned int id,const string &dateDePublication);
+            static bool modifierImage(unsigned int id,const string &image);
             static bool supprimer(unsigned int id);
             static bool consulter(vector<LivreData> &livres,const string &concat="");
 
             static bool modifierTitres(const vector<unsigned int> &ids, const string &titre);
             static bool modifierDateDePublications(const vector<unsigned int> &ids,const string &DateDePublication);
+            static bool modifierImage(const vector<unsigned int> &ids, const string &image);
             static bool supprimer(const vector<unsigned int> &ids);
             static bool consulter(vector<LivreData> &livres,const vector<unsigned int> &ids,const string &condition="",const string &concat="");
 
@@ -62,6 +72,7 @@ class Livre{
              */
             static bool modifierTitres_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &titres);
             static bool modifierDateDePublications_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &dateDePublications);
+            static bool modifierImages_WithDiffValues(const vector<unsigned int> &ids,const vector<string> &images);
 
             static bool ajouterNbreDeCopies(unsigned int id,unsigned int nbreAAjouter);
             static bool enleverNbreDeCopies(unsigned int id,unsigned int nbreAEnlever);
