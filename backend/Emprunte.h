@@ -12,6 +12,7 @@
 #include "livre.h"
 #include "util.h"
 
+
 using namespace __gnu_cxx;      //For using c++ <hashmap>
 
 class EmprunteData : public RefCounted{

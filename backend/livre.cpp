@@ -11,22 +11,11 @@ vector<string> Livre::vChamps = {"titre","dateDePub","nbreExemplairesTotal","nbr
 //---------------------------------0-----------1--------------2----------------------3-----------------------4--------5-------------
 string Livre::nomTable = "livre";
 
-<<<<<<< HEAD
-bool Livre::ajouter(const string titre,const string dateDePublication,unsigned int nbreExemplairesTotal,unsigned int id_auteur){
-    vector<string> vValeurs = {"\""+titre+"\"","\""+dateDePublication+"\"","\""+to_string(nbreExemplairesTotal)+"\"","\""+to_string(0)+"\"","\""+to_string(id_auteur)+"\""};
-=======
-bool Livre::ajouter(const string titre,const string dateDePublication,unsigned int id_auteur){
-    vector<string> vChamps = {"titre","dateDePub","nbreExemplairesTotal","nbreExemplairesEmprunter","id_auteur"};
-    vector<string> vValeurs = {"\""+titre+"\"","\""+dateDePublication+"\"","\""+to_string(NBR_EXAMPLAIRE_DEPART)+"\"","\""+to_string(0)+"\"","\""+to_string(id_auteur)+"\""};
 
-    return Root::recupererBD().ajouter(nomTable,vChamps,vValeurs);
-}
 
-bool Livre::ajouter(const string titre,const string dateDePublication,unsigned int id_auteur,string image){
-    vector<string> vValeurs = {"\""+titre+"\"","\""+dateDePublication+"\"","\""+to_string(NBR_EXAMPLAIRE_DEPART)+"\"","\""+to_string(0)+"\"","\""+to_string(id_auteur)+"\"","\""+image+"\""};
->>>>>>> b0c3dba5479333b0f7023b47366a1c5670193393
-
-    return Root::recupererBD().ajouter(nomTable,vChamps,vValeurs);
+bool Livre::ajouter(const string &titre,const string &dateDePublication,unsigned int id_auteur,unsigned int nbreExemplairesTotal,const string &image){
+    return Root::recupererBD().ajouter(nomTable,{"titre","dateDePub","nbreExemplairesTotal","id_auteur","image"},
+    {Util::stringify(titre),Util::stringify(dateDePublication),Util::integer_to_str(nbreExemplairesTotal),Util::integer_to_str(id_auteur),Util::stringify(image)});
 }
 
 bool Livre::modifierTitre(unsigned int id,const string &titre){
@@ -131,7 +120,7 @@ bool Livre::consulter(vector<LivreData> &livres,const vector<unsigned int> &ids,
         livres.push_back(data);
     }
 
-    if (vValeurs.size())    dut_puc2442_proj_backend_fill_child_field(AuteurData,LivreData,id_auteur,auteur,livres,&ids,Livre::getAuteurDataPtrs,false);
+    if (vValeurs.size())    dut_puc2442_proj_backend_fill_child_field(AuteurData,LivreData,id_auteur,auteur,livres,NULL,Livre::getAuteurDataPtrs,false);
 
     /*
     hash_map<unsigned int,AuteurData*> h1;
@@ -288,6 +277,7 @@ void LivreData::operator=(const LivreData &ld){
     this->nbreExemplairesTotal = ld.nbreExemplairesTotal;
     this->id_auteur = ld.id_auteur;
     this->auteur = ld.auteur;
+    this->image = ld.image;
 
     if (this->auteur)   this->auteur->ref();
 }

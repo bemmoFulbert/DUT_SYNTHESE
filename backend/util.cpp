@@ -35,3 +35,23 @@ bool Util::isComment(const string &ligne){
 long long Util::str_to_integer(const string &str){
     return strtoll(str.c_str(),NULL,10);
 }
+
+double Util::str_to_decimal(const string &str){
+    return strtod(str.c_str(),NULL);
+}
+
+string Util::stringify(const string &str){
+    return "\"" + str + "\"";
+}
+
+string Util::integer_to_str(long long i){
+    return std::to_string(i);
+}
+
+string Util::decimal_to_str(double d){
+    return std::to_string(d);
+}
+
+string Util::bool_to_str(bool b){
+    return b ? "true" : "false";
+}

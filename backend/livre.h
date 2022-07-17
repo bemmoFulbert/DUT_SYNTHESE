@@ -48,12 +48,7 @@ class LivreData : public RefCounted {
 //-----------------------declaration Livre ------------------------------
 class Livre{
         public:
-<<<<<<< HEAD
-            static bool ajouter(const string titre,const string dateDePublication,unsigned int nbreExemplairesTotal,unsigned int id_auteur);
-=======
-            static bool ajouter(const string titre,const string dateDePublication,unsigned int id_auteur);
-            static bool ajouter(const string titre,const string dateDePublication,unsigned int id_auteur,string image);
->>>>>>> b0c3dba5479333b0f7023b47366a1c5670193393
+            static bool ajouter(const string &titre,const string &dateDePublication,unsigned int id_auteur,unsigned int nbreExemplairesTotal=NBR_EXAMPLAIRE_DEPART,const string &image="");
             static bool modifierTitre(unsigned int id,const string &titre);
             static bool modifierDateDePublication(unsigned int id,const string &dateDePublication);
             static bool modifierImage(unsigned int id,const string &image);

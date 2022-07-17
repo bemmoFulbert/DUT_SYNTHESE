@@ -10,10 +10,6 @@ string Adherent::nomTable = "adherent";
 
 bool Adherent::ajouter(const string &nom,const string &addresse,const string &prenom,const string &email,const string &dateDeNaissance,const string &sexe){
     vector<string> vValeurs = {"\""+nom+"\"","\""+addresse+"\"","\""+to_string(0)+"\"","\""+prenom+"\"","\""+email+"\"","\""+dateDeNaissance+"\"","\""+sexe+"\""};
-<<<<<<< HEAD
-=======
-
->>>>>>> b0c3dba5479333b0f7023b47366a1c5670193393
     return Root::recupererBD().ajouter(nomTable,vChamps,vValeurs);
 }
 
@@ -168,14 +164,11 @@ bool Adherent::consulter(vector<AdherentData> &adherents,const string &concat){
 
     if(!Root::recupererBD().consulter(nomTable,vChamps_full,vValeurs,concat)) return false;
 
-    cerr << vValeurs.size() <<endl;
     for(unsigned int i=0;i<vValeurs.size();i+=vChamps_full.size()){
-        cerr << i <<endl;
         AdherentData data(Util::str_to_integer(vValeurs[i]),vValeurs[i+1],
                 vValeurs[i+2],strtoll(vValeurs[i+3].c_str(),NULL,10),
                 vValeurs[i+4],vValeurs[i+5],vValeurs[i+6],vValeurs[i+7]);
         adherents.push_back(data);
-        cerr << data.to_string(" , ") << endl;
     }
 
     return true;
@@ -357,17 +350,6 @@ void AdherentData::affiche_adherentData(vector<AdherentData> &v){
     }
 }
 
-void AdherentData::toQStringLists(const vector<AdherentData> &vAdhData, QStringList &ids, QStringList &addresses, QStringList &nbreLivresEmprunters, QStringList &prenoms, QStringList &emails, QStringList &dateDeNaissances, QStringList &sexes){
-    for (unsigned int i=0;i<vAdhData.size();i++){
-        ids << QString::number(vAdhData[i].id);
-        addresses << QString::fromStdString(vAdhData[i].addresse);
-        nbreLivresEmprunters << QString::number(vAdhData[i].nbreLivresEmprunter);
-        prenoms << QString::fromStdString(vAdhData[i].prenom);
-        emails << QString::fromStdString(vAdhData[i].email);
-        dateDeNaissances << QString::fromStdString(vAdhData[i].dateDeNaissance);
-        sexes << QString::fromStdString(vAdhData[i].sexe);
-    }
-}
 
 
 

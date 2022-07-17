@@ -8,6 +8,7 @@
 
 using namespace std;
 
+//This macro can be optimized by removing the *in_vector_of_ids_ptr* arg and and all it's related chunks of code sice the UniqueSet here is mandatory
 //For use in Data classes of database tables containing complex fields(which are also data classes)
 #define dut_puc2442_proj_backend_fill_child_field(child_data_type,this_data_type,child_id_field,child_field,out_vector_of_xxx_data,in_vector_of_ids_ptr,get_xxx_data_ptrs_func_name,ret_val_if_fail)  \
     if (1){     \
