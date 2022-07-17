@@ -15,6 +15,8 @@ SOURCES += \
     backend/livre.cpp \
     backend/root.cpp \
     backend/util.cpp \
+    frontend/adherenttablemodel.cpp \
+    frontend/adhheadermodel.cpp \
     main.cpp \
     mainwindow.cpp
 
@@ -29,6 +31,8 @@ HEADERS += \
     backend/livre.h \
     backend/root.h \
     backend/util.h \
+    frontend/adherenttablemodel.h \
+    frontend/adhheadermodel.h \
     mainwindow.h
 
 FORMS += \
